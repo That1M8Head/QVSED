@@ -1,6 +1,8 @@
-# QVSED - Qt-Based Volatile Small Editor
-# A cross-platform simple and volatile text editor by Arsalan Kazmi
-# See README.md or "Get Help" inside QVSED for more info
+"""
+QVSED - Qt-Based Volatile Small Editor
+A cross-platform simple and volatile text editor by Arsalan Kazmi
+See README.md or "Get Help" inside QVSED for more info
+"""
 
 import os
 from PyQt5.QtWidgets import (
@@ -15,7 +17,7 @@ class QVSEDApp:
     def __init__(self):
         self.app = QApplication([])
         self.window = QVSEDWindow()
-    
+
     def run(self):
         self.window.show()
         self.app.exec()
@@ -39,7 +41,7 @@ class QVSEDWindow(QMainWindow):
 
         if not os.path.isfile(config_file):
             self.echo_area_update("config.py not found - created default config.")
-            
+
             with open(config_file, 'w') as f:
                 f.write('''# Font
 font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
@@ -89,7 +91,7 @@ font_size = 11
 
     def clear_button_clicked(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
-        
+
         if text_area.toPlainText() == "":
             self.echo_area_update("Text Area is already blank.")
             return
