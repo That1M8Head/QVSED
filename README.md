@@ -12,7 +12,7 @@ QVSED is licensed under the GNU General Public License version 3 or later.
 
 QVSED is broken up into three parts - the Action Deck, the Text Area and the Echo Area.
 
-![QVSED screenshot, editing its own source code](screenshot.png)
+![QVSED screenshot, editing its own source code](qvsed_screenshot.png)
 
 The Action Deck includes the commands Clear Text, Open File, Save File, Get Help and Quit QVSED. These can be activated by clicking on them or entering their keyboard shortcut.
 
