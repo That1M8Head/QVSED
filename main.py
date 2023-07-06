@@ -42,12 +42,6 @@ class MyWindow(QMainWindow):
         self.open_shortcut.activated.connect(self.open_button_clicked)
         self.help_shortcut.activated.connect(self.help_button_clicked)
         self.quit_shortcut.activated.connect(self.quit_button_clicked)
-        
-    def load_configuration():
-        with open('config.json', 'r') as file:
-            return json.load(file)
-        
-    config = load_configuration()
 
     def clear_button_clicked(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
