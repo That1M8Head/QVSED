@@ -7,31 +7,29 @@ class MyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Load the UI file
         loadUi("QVSED.ui", self)
 
-        # Find the button widgets by their object names and connect their clicked signals to the respective methods
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area.setFocus()
+
         self.findChild(QPushButton, "clearButton").clicked.connect(self.clear_button_clicked)
         self.findChild(QPushButton, "saveButton").clicked.connect(self.save_button_clicked)
         self.findChild(QPushButton, "openButton").clicked.connect(self.open_button_clicked)
         self.findChild(QPushButton, "helpButton").clicked.connect(self.help_button_clicked)
         self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_button_clicked)
 
-        # Create actions for the keyboard shortcuts
         self.clear_action = QAction("Clear Text", self)
         self.save_action = QAction("Save File", self)
         self.open_action = QAction("Open File", self)
         self.help_action = QAction("Get Help", self)
         self.quit_action = QAction("Quit QVSED", self)
 
-        # Set the keyboard shortcuts for the actions
         self.clear_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
         self.save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
         self.open_shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
         self.help_shortcut = QShortcut(QKeySequence("Ctrl+H"), self)
         self.quit_shortcut = QShortcut(QKeySequence("Alt+Q"), self)
 
-        # Connect the actions to the respective methods
         self.clear_shortcut.activated.connect(self.clear_button_clicked)
         self.save_shortcut.activated.connect(self.save_button_clicked)
         self.open_shortcut.activated.connect(self.open_button_clicked)
@@ -39,10 +37,12 @@ class MyWindow(QMainWindow):
         self.quit_shortcut.activated.connect(self.quit_button_clicked)
 
     def clear_button_clicked(self):
-        # Find the QPlainTextEdit widget by its object name
         text_area = self.findChild(QPlainTextEdit, "textArea")
         
-        # Clear the text
+        if text_area.toPlainText() == "":
+            self.echoArea_Update("Text Area is already blank.")
+            return
+
         text_area.clear()
 
         self.echoArea_Update("Text Area has been cleared.")
@@ -50,9 +50,8 @@ class MyWindow(QMainWindow):
     def save_button_clicked(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
-        # Check if the Text Area is empty
         if text_area.toPlainText() == "":
-            self.echoArea_Update("Text Area is blank, will not save")
+            self.echoArea_Update("Text Area is blank, will not save.")
             return
 
         file_path, _ = QFileDialog.getSaveFileName(self, "Save File")
@@ -67,10 +66,8 @@ class MyWindow(QMainWindow):
                 self.echoArea_Update(f"Error saving file: {str(e)}")
 
     def open_button_clicked(self):
-        # Find the QPlainTextEdit widget by its object name
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
-        # Open a file picker dialog for opening
         file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
 
         if file_path:
@@ -105,10 +102,7 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
         QApplication.quit()
 
     def echoArea_Update(self, message):
-        # Find the QLineEdit widget by its object name
         echo_area = self.findChild(QLineEdit, "echoArea")
-        
-        # Change the text of the QLineEdit
         echo_area.setText(message)
 
 if __name__ == "__main__":
