@@ -3,31 +3,26 @@ from PyQt5.QtGui import QKeySequence, QFont
 from PyQt5.uic import loadUi
 import os
 
-config_file = "config.py"
-
-if not os.path.isfile(config_file):
-    # Create the config file with default options
-    with open(config_file, 'w') as f:
-        f.write('''# Font
-font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
-font_size = 11
-
-# Colours
-# Yes, you have to use the British spellings
-font_colour = "#FFFFFF"
-foreground_colour = "#393F4A"
-border_colour = "#31353F"
-background_colour = "#282C34"
-scrollbar_colour = "#393F4A"
-''')
-        
-import config as qvsed_config
-
 class MyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
         loadUi("QVSED.ui", self)
+
+        config_file = "config.py"
+
+        if not os.path.isfile(config_file):
+            self.echoArea_Update("config.py not found - created default config.")
+            
+            with open(config_file, 'w') as f:
+                f.write('''# Font
+font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
+font_size = 11
+
+# That's it for now.
+''')
+
+        import config as qvsed_config
 
         font = QFont()
         font.setFamilies(qvsed_config.font_family)
