@@ -33,6 +33,10 @@ class QVSEDWindow(QMainWindow):
         self.load_config()
         self.set_up_fonts()
 
+    def echo_area_update(self, message):
+        echo_area = self.findChild(QLineEdit, "echoArea")
+        echo_area.setText(message)
+
     def load_ui_file(self):
         loadUi("QVSED.ui", self)
 
@@ -75,21 +79,24 @@ font_size = 11
         self.open_shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
         self.help_shortcut = QShortcut(QKeySequence("Ctrl+H"), self)
         self.quit_shortcut = QShortcut(QKeySequence("Alt+Q"), self)
+        self.fullscreen_shortcut = QShortcut(QKeySequence("Alt+F"), self)
 
     def set_up_event_handlers(self):
-        self.clear_shortcut.activated.connect(self.clear_button_clicked)
-        self.save_shortcut.activated.connect(self.save_button_clicked)
-        self.open_shortcut.activated.connect(self.open_button_clicked)
-        self.help_shortcut.activated.connect(self.help_button_clicked)
-        self.quit_shortcut.activated.connect(self.quit_button_clicked)
+        self.clear_shortcut.activated.connect(self.clear_text_area)
+        self.save_shortcut.activated.connect(self.save_text_contents)
+        self.open_shortcut.activated.connect(self.load_from_file)
+        self.help_shortcut.activated.connect(self.show_help)
+        self.quit_shortcut.activated.connect(self.quit_app)
+        self.fullscreen_shortcut.activated.connect(self.toggle_fullscreen)
 
-        self.findChild(QPushButton, "clearButton").clicked.connect(self.clear_button_clicked)
-        self.findChild(QPushButton, "saveButton").clicked.connect(self.save_button_clicked)
-        self.findChild(QPushButton, "openButton").clicked.connect(self.open_button_clicked)
-        self.findChild(QPushButton, "helpButton").clicked.connect(self.help_button_clicked)
-        self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_button_clicked)
+        self.findChild(QPushButton, "clearButton").clicked.connect(self.clear_text_area)
+        self.findChild(QPushButton, "saveButton").clicked.connect(self.save_text_contents)
+        self.findChild(QPushButton, "openButton").clicked.connect(self.load_from_file)
+        self.findChild(QPushButton, "helpButton").clicked.connect(self.show_help)
+        self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_app)
+        self.findChild(QPushButton, "fullscreenButton").clicked.connect(self.toggle_fullscreen)
 
-    def clear_button_clicked(self):
+    def clear_text_area(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
         if text_area.toPlainText() == "":
@@ -100,7 +107,7 @@ font_size = 11
 
         self.echo_area_update("Text Area has been cleared.")
 
-    def save_button_clicked(self):
+    def save_text_contents(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
         if text_area.toPlainText() == "":
@@ -118,7 +125,7 @@ font_size = 11
             except Exception as e:
                 self.echo_area_update(f"Error saving file: {str(e)}")
 
-    def open_button_clicked(self):
+    def load_from_file(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
         file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
@@ -132,7 +139,7 @@ font_size = 11
             except Exception as e:
                 self.echo_area_update(f"Error opening file: {str(e)}")
 
-    def help_button_clicked(self):
+    def show_help(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
         help_message = """QVSED - Qt-based Volatile Small Editor
@@ -142,7 +149,7 @@ QVSED is a volatile text editor, meaning that there are no restrictions against 
 
 This is the Text Area, where the actual editing takes place. Type anything you want into here, and edit as you please.
 Down there, below the Text Area is the Echo Area, where messages and errors will be displayed.
-On the left of the QVSED window is the Action Deck, containing commands to clear the Text area, open or save a file, display this help text or quit QVSED.
+On the left of the QVSED window is the Action Deck, containing commands to clear the Text area, open or save a file, display this help text, toggle in and out of full screen mode or quit QVSED.
 
 I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little venture into my first Qt project.
 
@@ -152,12 +159,14 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
 
         text_area.setPlainText(help_message)
 
-    def quit_button_clicked(self):
+    def quit_app(self):
         QApplication.quit()
 
-    def echo_area_update(self, message):
-        echo_area = self.findChild(QLineEdit, "echoArea")
-        echo_area.setText(message)
+    def toggle_fullscreen(self):
+        if self.isFullScreen():
+            self.showNormal()
+        else:
+            self.showFullScreen()
 
     def update_widget_fonts(self, widget):
         if widget is None:
