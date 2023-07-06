@@ -5,6 +5,7 @@ See README.md or "Get Help" inside QVSED for more info
 """
 
 import os
+import shutil, importlib.util
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget,
     QFileDialog, QPlainTextEdit, QLineEdit, QAction, QShortcut
@@ -40,20 +41,26 @@ class QVSEDWindow(QMainWindow):
     def load_ui_file(self):
         loadUi("QVSED.ui", self)
 
+    def generate_config(self):
+        self.echo_area_update("Welcome to QVSED! Config file config.py created.")
+
+        shutil.copyfile("config_default.py", "config.py")
+    
+        # Update the first line of config.py
+        with open("config.py", "r+") as config_file:
+            lines = config_file.readlines()
+            if lines:
+                lines[0] = "# This is QVSED's config file, you can change its options here.\n"
+                config_file.seek(0)
+                config_file.writelines(lines)
+                config_file.truncate()
+
     def load_config(self):
         config_file = "config.py"
 
         if not os.path.isfile(config_file):
-            self.echo_area_update("config.py not found - created default config.")
-
-            with open(config_file, 'w') as f:
-                f.write('''# Font
-font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
-font_size = 11
-
-# That's it for now.
-''')
-
+            self.generate_config()
+        
         import config as qvsed_config
 
         self.font_family = qvsed_config.font_family
