@@ -96,6 +96,8 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
 
 - Arsalan Kazmi <sonicspeed848@gmail.com>, That1M8Head on GitHub"""
 
+        self.echoArea_Update("Help message shown in Text Area.")
+
         text_area.setPlainText(help_message)
 
     def quit_button_clicked(self):
