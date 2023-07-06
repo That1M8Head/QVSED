@@ -6,7 +6,8 @@ See README.md or "Get Help" inside QVSED for more info
 
 import os
 import shutil
-import pkg_resources
+import configparser
+import importlib.util
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget,
     QFileDialog, QPlainTextEdit, QLineEdit, QAction, QShortcut
@@ -45,28 +46,45 @@ class QVSEDWindow(QMainWindow):
         loadUi(ui_file, self)
 
     def generate_config(self):
-        self.echo_area_update("Welcome to QVSED! Config file config.py created.")
-
         current_dir = os.path.dirname(os.path.abspath(__file__))
         config_default = os.path.join(current_dir, 'config_default.py')
-        shutil.copyfile(config_default, "QVSED/config.py")
-    
+        
+        if os.name == 'nt': # Windows
+            user_config_dir = os.path.join(os.environ['APPDATA'], 'QVSED')
+        else: # *nix
+            user_config_dir = os.path.expanduser("~") + "/.config/QVSED"
+        
+        if not os.path.exists(user_config_dir):
+            os.makedirs(user_config_dir)
+        user_config_file = os.path.join(user_config_dir, 'config.py')
+        
+        shutil.copyfile(config_default, user_config_file)
+
         # Update the first line of config.py
-        with open("config.py", "r+") as config_file:
+        with open(user_config_file, "r+") as config_file:
             lines = config_file.readlines()
             if lines:
                 lines[0] = "# This is QVSED's config file, you can change its options here.\n"
                 config_file.seek(0)
                 config_file.writelines(lines)
                 config_file.truncate()
+                
+        self.echo_area_update(f"Config generated at {user_config_file}.")
 
     def load_config(self):
-        config_file = "config.py"
+        if os.name == 'nt': # Windows
+            user_config_dir = os.path.join(os.environ['APPDATA'], 'QVSED')
+        else: # *nix
+            user_config_dir = os.path.expanduser("~") + "/.config/QVSED"
+        
+        user_config_file = os.path.join(user_config_dir, 'config.py')
 
-        if not os.path.isfile(config_file):
+        if not os.path.isfile(user_config_file):
             self.generate_config()
         
-        import config as qvsed_config
+        spec = importlib.util.spec_from_file_location("qvsed_config", user_config_file)
+        qvsed_config = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(qvsed_config)
 
         self.font_family = qvsed_config.font_family
         self.font_size = qvsed_config.font_size
