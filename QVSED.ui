@@ -479,11 +479,52 @@ QPushButton:hover {
 
 QPushButton:pressed {
 	 background: #282c34;
+}
+
+QScrollBar:vertical {
+    background-color: #31353f;
+    width: 16px;
+    margin: 16px 0 16px 0;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #393f4a;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #555B67;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
 }</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>12</number>
+    </property>
+    <property name="leftMargin">
+     <number>8</number>
+    </property>
+    <property name="topMargin">
+     <number>8</number>
+    </property>
+    <property name="rightMargin">
+     <number>8</number>
+    </property>
+    <property name="bottomMargin">
+     <number>8</number>
+    </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="actionDeck">
+      <property name="spacing">
+       <number>4</number>
+      </property>
       <item>
        <widget class="QPushButton" name="clearButton">
         <property name="minimumSize">
@@ -655,7 +696,10 @@ QPushButton:pressed {
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
+     <layout class="QVBoxLayout" name="textAndEchoAreas">
+      <property name="spacing">
+       <number>4</number>
+      </property>
       <item>
        <widget class="QPlainTextEdit" name="textArea">
         <property name="font">
@@ -665,12 +709,20 @@ QPushButton:pressed {
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">border: 2px; background: #31353f; padding: 5px;</string>
+         <string notr="true">border: 2px;
+background: #31353f;
+padding: 5px;
+
+QPlainTextEdit {
+    background-color: #f2f2f2;
+}
+
+</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="echoArea">
         <property name="font">
          <font>
           <family>Consolas</family>
@@ -681,7 +733,7 @@ QPushButton:pressed {
          <string notr="true">border: 2px; background: #31353f; padding: 2px 6px;</string>
         </property>
         <property name="text">
-         <string>Welcome to QVSED!</string>
+         <string>Welcome to QVSED! This is the Echo Area.</string>
         </property>
         <property name="readOnly">
          <bool>true</bool>

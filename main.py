@@ -1,0 +1,118 @@
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QFileDialog, QPlainTextEdit, QLineEdit, QAction, QShortcut
+from PyQt5.QtGui import QKeySequence
+from PyQt5.uic import loadUi
+import os
+
+class MyWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        # Load the UI file
+        loadUi("QVSED.ui", self)
+
+        # Find the button widgets by their object names and connect their clicked signals to the respective methods
+        self.findChild(QPushButton, "clearButton").clicked.connect(self.clear_button_clicked)
+        self.findChild(QPushButton, "saveButton").clicked.connect(self.save_button_clicked)
+        self.findChild(QPushButton, "openButton").clicked.connect(self.open_button_clicked)
+        self.findChild(QPushButton, "helpButton").clicked.connect(self.help_button_clicked)
+        self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_button_clicked)
+
+        # Create actions for the keyboard shortcuts
+        self.clear_action = QAction("Clear Text", self)
+        self.save_action = QAction("Save File", self)
+        self.open_action = QAction("Open File", self)
+        self.help_action = QAction("Get Help", self)
+        self.quit_action = QAction("Quit QVSED", self)
+
+        # Set the keyboard shortcuts for the actions
+        self.clear_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
+        self.save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+        self.open_shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
+        self.help_shortcut = QShortcut(QKeySequence("Ctrl+H"), self)
+        self.quit_shortcut = QShortcut(QKeySequence("Alt+Q"), self)
+
+        # Connect the actions to the respective methods
+        self.clear_shortcut.activated.connect(self.clear_button_clicked)
+        self.save_shortcut.activated.connect(self.save_button_clicked)
+        self.open_shortcut.activated.connect(self.open_button_clicked)
+        self.help_shortcut.activated.connect(self.help_button_clicked)
+        self.quit_shortcut.activated.connect(self.quit_button_clicked)
+
+    def clear_button_clicked(self):
+        # Find the QPlainTextEdit widget by its object name
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+        
+        # Clear the text
+        text_area.clear()
+
+        self.echoArea_Update("Text Area has been cleared.")
+
+    def save_button_clicked(self):
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+
+        # Check if the Text Area is empty
+        if text_area.toPlainText() == "":
+            self.echoArea_Update("Text Area is blank, will not save")
+            return
+
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save File")
+
+        if file_path:
+            try:
+                with open(file_path, 'w') as file:
+                    file.write(text_area.toPlainText())
+                file_name = os.path.basename(file_path)
+                self.echoArea_Update(f"Saved file {file_name}.")
+            except Exception as e:
+                self.echoArea_Update(f"Error saving file: {str(e)}")
+
+    def open_button_clicked(self):
+        # Find the QPlainTextEdit widget by its object name
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+
+        # Open a file picker dialog for opening
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
+
+        if file_path:
+            try:
+                with open(file_path, 'r') as file:
+                    text_area.setPlainText(file.read())
+                file_name = os.path.basename(file_path)
+                self.echoArea_Update(f"Opened file {file_name}.")
+            except Exception as e:
+                self.echoArea_Update(f"Error opening file: {str(e)}")
+
+    def help_button_clicked(self):
+        # Find the QPlainTextEdit widget by its object name
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+
+        help_message = """QVSED - Qt-based Volatile Small Editor
+========================================
+
+QVSED is a volatile text editor, meaning that there are no restrictions against unsaved work or bad files, licensed under the GNU General Public License version 3 or later.
+
+This is the Text Area, where the actual editing takes place. Type anything you want into here, and edit as you please.
+Down there, below the Text Area is the Echo Area, where messages and errors will be displayed.
+On the left of the QVSED window is the Action Deck, containing commands to clear the Text area, open or save a file, display this help text or quit QVSED.
+
+I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little venture into my first Qt project.
+
+- Arsalan Kazmi <sonicspeed848@gmail.com>, That1M8Head on GitHub"""
+
+        text_area.setPlainText(help_message)
+
+    def quit_button_clicked(self):
+        QApplication.quit()
+
+    def echoArea_Update(self, message):
+        # Find the QLineEdit widget by its object name
+        echo_area = self.findChild(QLineEdit, "echoArea")
+        
+        # Change the text of the QLineEdit
+        echo_area.setText(message)
+
+if __name__ == "__main__":
+    app = QApplication([])
+    window = MyWindow()
+    window.show()
+    app.exec()
