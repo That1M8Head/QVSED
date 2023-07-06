@@ -6,6 +6,14 @@ QVSED is a PyQt5 rewrite of my older project, [ASMED (Another SMol EDitor)](http
 
 QVSED seeks to replace ASMED by being cross-platform, and it will bring over the benefits of such a lightweight editor without the overhead of .NET.
 
+You can install QVSED from PyPI:
+
+```sh
+pip install --upgrade QVSED
+```
+
+And run it with the `qvsed` command.
+
 QVSED is licensed under the GNU General Public License version 3 or later.
 
 ## The window

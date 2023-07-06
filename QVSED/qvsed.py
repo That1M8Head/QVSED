@@ -5,7 +5,8 @@ See README.md or "Get Help" inside QVSED for more info
 """
 
 import os
-import shutil, importlib.util
+import shutil
+import pkg_resources
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget,
     QFileDialog, QPlainTextEdit, QLineEdit, QAction, QShortcut
@@ -39,12 +40,16 @@ class QVSEDWindow(QMainWindow):
         echo_area.setText(message)
 
     def load_ui_file(self):
-        loadUi("QVSED.ui", self)
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        ui_file = os.path.join(current_dir, 'QVSED.ui')
+        loadUi(ui_file, self)
 
     def generate_config(self):
         self.echo_area_update("Welcome to QVSED! Config file config.py created.")
 
-        shutil.copyfile("config_default.py", "config.py")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        config_default = os.path.join(current_dir, 'config_default.py')
+        shutil.copyfile(config_default, "QVSED/config.py")
     
         # Update the first line of config.py
         with open("config.py", "r+") as config_file:
@@ -184,7 +189,9 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
         for child_widget in widget.findChildren(QWidget):
             self.update_widget_fonts(child_widget)
 
-
-if __name__ == "__main__":
+def main():
     app = QVSEDApp()
     app.run()
+
+if __name__ == "__main__":
+    main()
