@@ -63,6 +63,29 @@ For example, when a file is opened, it prints its file name. If a config file wa
 
 QVSED inherited the name from Emacs. Well, less "inherited" and more "stolen from."
 
+## Configuration
+
+When QVSED is started, it looks for a configuration file. If it can't find one, it creates one and populates it with defaults.
+
+On Windows, the configuration file will be stored at `C:\Users\<username>\AppData\Roaming\QVSED\config.py`, where `<username>` is your Windows username.
+
+On *nix systems, the configuration file will be stored at `~/.config/QVSED/config.py`, where `~` is your home directory (`/home/<username>`).
+
+The configuration file currently only supports two options to configure: `font_family` and `font_size`.
+
+```python
+# The default QVSED config.
+font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
+font_size = 11
+```
+
+Keep in mind that `font_family` *must* be a list. If you want only one font, specify:
+
+```python
+# Obviously replace "My Font" with the name of the font you want.
+font_family = ["My Font"]
+```
+
 ## Making Shortcuts
 
 ### Windows
