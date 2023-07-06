@@ -455,7 +455,7 @@
   </property>
   <property name="font">
    <font>
-    <family>Consolas</family>
+    <family>monospace</family>
    </font>
   </property>
   <property name="windowTitle">
@@ -541,7 +541,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -572,7 +572,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -603,7 +603,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -634,7 +634,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -678,7 +678,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -709,7 +709,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         </property>
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -735,7 +735,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
        <widget class="QPlainTextEdit" name="textArea">
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -756,7 +756,7 @@ QPlainTextEdit {
        <widget class="QLineEdit" name="echoArea">
         <property name="font">
          <font>
-          <family>Consolas</family>
+          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
         </property>
