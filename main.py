@@ -1,13 +1,20 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QFileDialog, QPlainTextEdit, QLineEdit, QAction, QShortcut
-from PyQt5.QtGui import QKeySequence
+from PyQt5.QtGui import QKeySequence, QFont
 from PyQt5.uic import loadUi
-import os
+import os, json
 
 class MyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
         loadUi("QVSED.ui", self)
+
+        font = QFont()
+
+        font.setFamilies(["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"])
+        font.setPointSize(11)
+        QApplication.instance().setFont(font)
+        self.update_widget_fonts(self)
 
         text_area = self.findChild(QPlainTextEdit, "textArea")
         text_area.setFocus()
@@ -35,6 +42,12 @@ class MyWindow(QMainWindow):
         self.open_shortcut.activated.connect(self.open_button_clicked)
         self.help_shortcut.activated.connect(self.help_button_clicked)
         self.quit_shortcut.activated.connect(self.quit_button_clicked)
+        
+    def load_configuration():
+        with open('config.json', 'r') as file:
+            return json.load(file)
+        
+    config = load_configuration()
 
     def clear_button_clicked(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
@@ -106,6 +119,15 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
     def echoArea_Update(self, message):
         echo_area = self.findChild(QLineEdit, "echoArea")
         echo_area.setText(message)
+
+    def update_widget_fonts(self, widget):
+        if widget is None:
+            return
+
+        widget.setFont(QApplication.instance().font())
+
+        for child_widget in widget.findChildren(QWidget):
+            self.update_widget_fonts(child_widget)
 
 if __name__ == "__main__":
     app = QApplication([])
