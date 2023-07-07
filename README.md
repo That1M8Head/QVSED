@@ -24,28 +24,33 @@ QVSED is free software, licensed under the GNU General Public License version 3 
 
 QVSED is broken up into three parts - the Action Deck, the Text Area and the Echo Area.
 
+The Action Deck contains editing commands, the Text Area is a text area, and the Echo Area is where messages will be printed.
+
 ![QVSED screenshot, showing the help message](qsved_screenie.png)
 
 ## Action Deck
 
-### Key
+The Action Deck, positioned on the left side of the QVSED window, containing commands to clear the Text Area, open or save a file, display this help text, toggle in and out of full screen mode or quit QVSED.
 
-+ `C` - `Ctrl` (Windows, Linux), `⌘` (macOS)
-+ `A` - `Alt` (Windows, Linux), `⌥` (macOS)
+The Action Deck is on the left rather than on the top like a traditional menu bar, so that the buttons can be bigger while still providing enough screen real estate for the Text Area.
+
+### Key Prefixes
+
++ `C-` - `Ctrl` (Windows, Linux), `⌘` (macOS)
++ `A-` - `Alt` (Windows, Linux), `⌥` (macOS)
+
+When you see `<C-n>`, for instance, that means pressing `Ctrl+N` on Windows/Linux, or `⌘N` on macOS.
+
+This kind of notation was inspired by Emacs (though, QVSED uses `A-` instead of `M-` to be clearer).
 
 ### Commands
 
-**Clear Text** - `C-n` - Clear the Text Area. Think of it like New File.
-
-**Open File** - `C-f` - Launch a file picker and load the chosen file's contents into the Text Area.
-
-**Save File** - `C-s` - Launch a file picker and save the contents of the Text Area to the chosen file name.
-
-**Full Screen** - `A-f` - Toggle full screen mode.
-
-**Get Help** - `C-h` - Show a help message in the Text Area. This will overwrite your current work.
-
-**Quit QVSED**  - `A-q` - Quit QVSED on the spot with no confirmation dialog.
++ **Clear Text** - `<C-n>` - Clear the Text Area. Think of it like New File.
++ **Open File** - `<C-f>` - Launch a file picker and load the chosen file's contents into the Text Area.
++ **Save File** - `<C-s>` - Launch a file picker and save the contents of the Text Area to the chosen file name.
++ **Full Screen** - `<A-f>` - Toggle full screen mode.
++ **Get Help** - `<C-h>` - Show a help message in the Text Area. This will overwrite your current work.
++ **Quit QVSED**  - `<A-q>` - Quit QVSED on the spot with no confirmation dialog.
 
 ## Text Area
 
@@ -71,7 +76,7 @@ On Windows, the configuration file will be stored at `C:\Users\<username>\AppDat
 
 On *nix systems, the configuration file will be stored at `~/.config/QVSED/config.py`, where `~` is your home directory (`/home/<username>`).
 
-The configuration file currently only supports two options to configure: `font_family` and `font_size`.
+At the moment, QVSED currently only supports two options to configure, `font_family` and `font_size`.
 
 ```python
 # The default QVSED config.
