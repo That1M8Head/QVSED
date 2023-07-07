@@ -6,13 +6,13 @@ See README.md or "Get Help" inside QVSED for more info
 
 import os
 import shutil
-import configparser
 import importlib.util
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget,
     QFileDialog, QPlainTextEdit, QLineEdit, QAction, QShortcut
 )
 from PyQt5.QtGui import QKeySequence, QFont
+from PyQt5.QtCore import QTextCodec
 from PyQt5.uic import loadUi
 
 
@@ -30,15 +30,17 @@ class QVSEDWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.load_ui_file()
-        self.set_up_actions()
-        self.set_up_shortcuts()
-        self.set_up_event_handlers()
+        self.set_text_area_encoding("UTF-8")
+        self.set_up_action_deck()
         self.load_config()
         self.set_up_fonts()
 
     def echo_area_update(self, message):
         echo_area = self.findChild(QLineEdit, "echoArea")
         echo_area.setText(message)
+
+    def set_text_area_encoding(self, encoding):
+        QTextCodec.setCodecForLocale(QTextCodec.codecForName(encoding))
 
     def load_ui_file(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -126,6 +128,11 @@ class QVSEDWindow(QMainWindow):
         self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_app)
         self.findChild(QPushButton, "fullscreenButton").clicked.connect(self.toggle_fullscreen)
 
+    def set_up_action_deck(self):
+        self.set_up_actions()
+        self.set_up_shortcuts()
+        self.set_up_event_handlers()
+
     def clear_text_area(self):
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
@@ -162,7 +169,7 @@ class QVSEDWindow(QMainWindow):
 
         if file_path:
             try:
-                with open(file_path, 'r') as file:
+                with open(file_path, 'r', encoding='utf-8') as file:
                     text_area.setPlainText(file.read())
                 file_name = os.path.basename(file_path)
                 self.echo_area_update(f"Opened file {file_name}.")
