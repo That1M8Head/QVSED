@@ -19,6 +19,9 @@ BUILD_DIR := build
 target:
 	@$(PY) setup.py sdist
 
+wheel:
+	@$(PY) setup.py bdist_wheel
+
 clean:
 	@if exist $(PACKAGE_NAME).egg-info $(RD) $(PACKAGE_NAME).egg-info
 	@if exist $(DIST_DIR) $(RD) $(DIST_DIR)
