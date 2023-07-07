@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='qvsed',
-    version='1.1.2',
+    version='1.2.0',
     author='Arsalan Kazmi',
     description='Qt-Based Volatile Small Editor',
     long_description='QVSED is a volatile text editor, meaning that there are no restrictions against unsaved work or bad files. QVSED is a PyQt5 rewrite of my older project, ASMED (Another SMol EDitor), which was written using Windows Forms, and was quite obviously only for Windows. QVSED seeks to replace ASMED by being cross-platform, and it will bring over the benefits of such a lightweight editor without the overhead of .NET. QVSED is licensed under the GNU General Public License version 3 or later.',
