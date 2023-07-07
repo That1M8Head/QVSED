@@ -42,7 +42,7 @@ class QVSEDWindow(QMainWindow):
 
     def load_ui_file(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        ui_file = os.path.join(current_dir, 'QVSED.ui')
+        ui_file = os.path.join(current_dir, 'qvsed.ui')
         loadUi(ui_file, self)
 
     def generate_config(self):

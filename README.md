@@ -11,7 +11,7 @@ QVSED aims to replace ASMED by offering cross-platform support and the advantage
 QVSED [is available on PyPI](https://pypi.org/project/QVSED/). You can install it using the following command:
 
 ```bash
-pip install --upgrade QVSED
+pip install --upgrade qvsed
 ```
 
 To run QVSED, use the `qvsed` command. If you find it convenient to have a clickable icon to launch QVSED with, scroll down to find out how to make a shortcut/alias/symlink/whatever.
