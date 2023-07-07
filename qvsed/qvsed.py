@@ -174,8 +174,7 @@ class QVSEDWindow(QMainWindow):
 
         help_message = """QVSED - Qt-based Volatile Small Editor
 ========================================
-
-QVSED is a volatile text editor, meaning that there are no restrictions against unsaved work or bad files, licensed under the GNU General Public License version 3 or later.
+QVSED is a stateless, volatile text editor with a minimalist approach, focusing solely on text editing without file metadata or prompts for potentially destructive actions.
 
 This is the Text Area, where the actual editing takes place. Type anything you want into here, and edit as you please.
 Down there, below the Text Area is the Echo Area, where messages and errors will be displayed.
