@@ -19,13 +19,7 @@
   <property name="windowTitle">
    <string>QVSED</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <widget class="QWidget" name="centralwidget">
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
     <property name="spacing">
      <number>0</number>
@@ -83,9 +77,6 @@
               <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
             <property name="text">
              <string>Clear Text &lt;C-n&gt;</string>
             </property>
@@ -110,12 +101,8 @@
             </property>
             <property name="font">
              <font>
-              <family>monospace</family>
               <pointsize>11</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>Save File &lt;C-s&gt;</string>
@@ -141,12 +128,8 @@
             </property>
             <property name="font">
              <font>
-              <family>monospace</family>
               <pointsize>11</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>Open File &lt;C-f&gt;</string>
@@ -172,12 +155,8 @@
             </property>
             <property name="font">
              <font>
-              <family>monospace</family>
               <pointsize>11</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>Full Screen &lt;A-f&gt;</string>
@@ -216,12 +195,8 @@
             </property>
             <property name="font">
              <font>
-              <family>monospace</family>
               <pointsize>11</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>Get Help &lt;C-h&gt;</string>
@@ -247,12 +222,8 @@
             </property>
             <property name="font">
              <font>
-              <family>monospace</family>
               <pointsize>11</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>Quit QVSED &lt;A-q&gt;</string>
@@ -268,12 +239,8 @@
          <widget class="QPlainTextEdit" name="textArea">
           <property name="font">
            <font>
-            <family>monospace</family>
             <pointsize>11</pointsize>
            </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -283,12 +250,8 @@
        <widget class="QLineEdit" name="echoArea">
         <property name="font">
          <font>
-          <family>monospace</family>
           <pointsize>11</pointsize>
          </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
         </property>
         <property name="text">
          <string>Welcome to QVSED!</string>

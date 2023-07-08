@@ -68,23 +68,34 @@ class QVSEDWindow(QMainWindow):
         Generate and apply a style sheet based on the config.py file.
         """
 
+        print(text_color)
+
         stylesheet = f"""
+QMainWindow {{
+    color: {text_color};
+    background: {background_color};
+}}
+
 QPlainTextEdit, QLineEdit {{
+    color: {text_color};
     background: {button_focus_color};
     border: 2px solid {button_color};
 }}
 
 QPushButton {{
+    color: {text_color};
     border: 2px solid {button_focus_color};
     background: {button_color};
     padding: 2px;
 }}
 
 QPushButton:hover {{
+    color: {text_color};
     background: {button_focus_color};
 }}
 
 QPushButton:pressed {{
+    color: {text_color};
     background: {background_color};
 }}
 
@@ -109,11 +120,6 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
     background: none;
-}}
-
-QMainWindow {{
-    color: {text_color};
-    background: {background_color};
 }}
         """
 
