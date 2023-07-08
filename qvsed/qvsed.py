@@ -18,7 +18,9 @@ from PyQt5.QtWidgets import (
     QFileDialog, QPlainTextEdit, QLineEdit,
     QAction, QShortcut
 )
-from PyQt5.QtGui import QKeySequence, QFont
+from PyQt5.QtGui import (
+    QKeySequence, QFont, QDragEnterEvent, QDropEvent
+)
 from PyQt5.QtCore import QTextCodec
 from PyQt5.uic import loadUi
 
@@ -56,6 +58,7 @@ class QVSEDWindow(QMainWindow):
         self.load_ui_file()
         self.focus_text_area()
         self.set_text_area_encoding("UTF-8")
+        self.set_up_text_area_handlers()
         self.set_up_action_deck()
         self.echo_area_update(f"Welcome to QVSED v{self.get_qvsed_version()}!")
         self.load_config()
@@ -170,6 +173,23 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         self.help_shortcut.activated.connect(self.show_help)
         self.quit_shortcut.activated.connect(self.quit_app)
         self.fullscreen_shortcut.activated.connect(self.toggle_fullscreen)
+
+    def drag_enter_event(self, event: QDragEnterEvent):
+        """
+        Handle the drag enter event for the Text Area.
+        """
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+
+    def drop_event(self, event: QDropEvent):
+        """
+        Handle the drop event for the Text Area.
+        """
+        if event.mimeData().hasUrls():
+            file_path = event.mimeData().urls()[0].toLocalFile()
+            self.load_from_file(file_path)
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area.repaint()
 
     def echo_area_update(self, message):
         """
@@ -330,7 +350,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         self.set_up_actions()
         self.set_up_shortcuts()
-        self.set_up_event_handlers()
+        self.set_up_action_deck_handlers()
 
     def set_up_actions(self):
         """
@@ -342,12 +362,22 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         self.help_action = QAction("Get Help", self)
         self.quit_action = QAction("Quit QVSED", self)
 
-    def set_up_event_handlers(self):
+    def set_up_action_deck_handlers(self):
         """
         Set up the event handlers for the Action Deck.
         """
         self.connect_command_buttons()
         self.connect_key_bindings()
+
+    def set_up_text_area_handlers(self):
+        """
+        Set up the event handlers for the Text Area.
+        """
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+
+        text_area.dragEnterEvent = self.drag_enter_event
+        text_area.dragMoveEvent = self.drag_enter_event
+        text_area.dropEvent = self.drop_event
 
     def set_up_fonts(self):
         """
