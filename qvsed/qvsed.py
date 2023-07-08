@@ -8,7 +8,7 @@ See README.md or "Get Help" inside QVSED for more info
 # pylint: disable=attribute-defined-outside-init
 # pylint: disable=broad-exception-caught
 
-import os
+import os, sys
 import shutil
 import importlib.util
 import pkg_resources
@@ -59,6 +59,8 @@ class QVSEDWindow(QMainWindow):
         self.load_config()
         self.set_up_fonts()
         self.echo_area_update(f"Welcome to QVSED v{self.get_qvsed_version()}!")
+        if self.check_if_file_parameter():
+            self.load_from_file(sys.argv[1])
 
     def apply_style_sheet(self):
         """
@@ -110,6 +112,16 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
         # Apply the stylesheet to the app
         self.setStyleSheet(stylesheet)
+
+    def check_if_file_parameter(self):
+        """
+        Check if a file path was specified at the parameter.
+        """
+        if len(sys.argv) < 2:
+            return False
+
+        file_path = sys.argv[1]
+        return os.path.isfile(file_path)
 
     def clear_text_area(self):
         """
@@ -239,13 +251,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         except AttributeError as error:
             self.echo_area_update(f"Check config.py: {str(error)}")
 
-    def load_from_file(self):
+    def load_from_file(self, file_path = None):
         """
         Open a file dialog, and load the contents of a file into the Text Area.
         """
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
+        if not file_path:
+            file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
 
         if file_path:
             try:
