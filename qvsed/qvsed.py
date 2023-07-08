@@ -62,43 +62,50 @@ class QVSEDWindow(QMainWindow):
         if self.check_if_file_parameter():
             self.load_from_file(sys.argv[1])
 
-    def apply_style_sheet(self):
+    def apply_style_sheet(self, text_color, background_color, button_color, button_focus_color):
         """
         Generate and apply a style sheet based on the config.py file.
         """
 
-        stylesheet = f"""QMainWindow, QLabel, QPushButton, #textArea, #echoArea {{
-    color: {self.text_color};
-    background: {self.background_color};
+        print(f"{text_color}, {background_color}, {button_color}, {button_focus_color}")
+
+        stylesheet = f"""QMainWindow, QLabel, QPushButton {{
+    color: {text_color};
+    background: {background_color};
 }}
 
-QWidget#centralwidget QPushButton {{
-    border: 2px solid #31353f;
-    background: {self.button_background_color};
+QPushButton {{
+    border: 2px solid {background_color};
+    background: {button_color};
     padding: 2px;
 }}
 
-QWidget#centralwidget QPushButton:hover {{
-    background: {self.button_hover_background_color};
+QPlainTextEdit, QLineEdit {{
+    background: {button_color};
+    border: 2px solid {button_color};
 }}
 
-QWidget#centralwidget QPushButton:pressed {{
-    background: {self.button_pressed_background_color};
+QPushButton:hover {{
+    background: {button_focus_color};
+}}
+
+QPushButton:pressed {{
+    background: {background_color};
 }}
 
 QScrollBar:vertical {{
-    background-color: {self.scrollbar_background_color};
+    background-color: {background_color};
     width: 16px;
     margin: 16px 0 16px 0;
 }}
 
 QScrollBar::handle:vertical {{
-    background-color: {self.scrollbar_handle_background_color};
+    background-color: {button_color};
     min-height: 20px;
 }}
 
 QScrollBar::handle:vertical:hover {{
-    background-color: {self.scrollbar_handle_hover_background_color};
+    background-color: {button_focus_color};
 }}
 
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
@@ -239,15 +246,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         # Load the colour scheme settings from the config file
         # We use the shorter American spellings because it's standard, I guess
         try:
-            self.text_color = qvsed_config.text_color
-            self.background_color = qvsed_config.background_color
-            self.button_background_color = qvsed_config.button_background_color
-            self.button_hover_background_color = qvsed_config.button_hover_background_color
-            self.button_pressed_background_color = qvsed_config.button_pressed_background_color
-            self.scrollbar_background_color = qvsed_config.scrollbar_background_color
-            self.scrollbar_handle_background_color = qvsed_config.scrollbar_handle_background_color
-            self.scrollbar_handle_hover_background_color = qvsed_config.scrollbar_handle_hover_background_color
-            self.apply_style_sheet()
+            text_color = qvsed_config.text_color
+            background_color = qvsed_config.background_color
+            button_color = qvsed_config.button_color
+            button_focus_color = qvsed_config.button_focus_color
+            self.apply_style_sheet(text_color, background_color, button_color, button_focus_color)
         except AttributeError as error:
             self.echo_area_update(f"Check config.py: {str(error)}")
 
