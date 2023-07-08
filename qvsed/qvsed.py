@@ -289,8 +289,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         below three modules, which are all components of the Action Deck.
         """
         self.set_up_actions()
-        self.set_up_event_handlers()
         self.set_up_shortcuts()
+        self.set_up_event_handlers()
 
     def set_up_actions(self):
         """
@@ -306,8 +306,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Set up the event handlers for the Action Deck.
         """
-        self.connect_key_bindings()
         self.connect_command_buttons()
+        self.connect_key_bindings()
 
     def set_up_fonts(self):
         """
