@@ -92,22 +92,13 @@ font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospac
 font_size = 11
 
 # Colours
-text_color = "white"
-background_color = "#282c34"
-button_background_color = "#393f4a"
-button_hover_background_color = "#31353f"
-button_pressed_background_color = background_color
-scrollbar_background_color = "#31353f"
-scrollbar_handle_background_color = "#393f4a"
-scrollbar_handle_hover_background_color = "#555B67"
+text_color = "#FFFFFF"
+background_color = "#282C34"
+button_color = "#393F4A"
+button_focus_color = "#31353F"
 ```
 
-Keep in mind that `font_family` *must* be a list. If you want only one font, specify:
-
-```python
-# Obviously replace "My Font" with the name of the font you want.
-font_family = ["My Font"]
-```
+Keep in mind that `font_family` *must* be a list. If you want only one font, specify `font_family = ["My Font"]`.
 
 ## Making Shortcuts
 
