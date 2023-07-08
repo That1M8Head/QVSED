@@ -68,8 +68,6 @@ class QVSEDWindow(QMainWindow):
         Generate and apply a style sheet based on the config.py file.
         """
 
-        print(text_color)
-
         stylesheet = f"""
 QMainWindow {{
     color: {text_color};
