@@ -777,7 +777,7 @@ QPlainTextEdit {
          <string notr="true">border: 2px; background: #31353f; padding: 6px;</string>
         </property>
         <property name="text">
-         <string>Welcome to QVSED! This is the Echo Area.</string>
+         <string>Welcome to QVSED!</string>
         </property>
         <property name="cursorPosition">
          <number>0</number>

@@ -11,6 +11,7 @@ See README.md or "Get Help" inside QVSED for more info
 import os
 import shutil
 import importlib.util
+import pkg_resources
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QWidget,
     QFileDialog, QPlainTextEdit, QLineEdit,
@@ -57,6 +58,7 @@ class QVSEDWindow(QMainWindow):
         self.set_up_action_deck()
         self.load_config()
         self.set_up_fonts()
+        self.echo_area_update(f"Welcome to QVSED version {self.get_qvsed_version()}!")
 
     def apply_style_sheet(self):
         """
@@ -191,6 +193,15 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
                 config_file.truncate()
 
         self.echo_area_update(f"Config generated at {user_config_file}.")
+
+    def get_qvsed_version(self):
+        """
+        Return the QVSED version specified in setup.py.
+        """
+        try:
+            return pkg_resources.get_distribution('qvsed').version
+        except pkg_resources.DistributionNotFound:
+            return "?.?.?"
 
     def load_config(self):
         """
