@@ -77,7 +77,8 @@ QMainWindow {{
 QPlainTextEdit, QLineEdit {{
     color: {text_color};
     background: {button_focus_color};
-    border: 2px solid {background_color};
+    padding: 8px;
+    border: none;
 }}
 
 QPushButton {{
