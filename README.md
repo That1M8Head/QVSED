@@ -2,7 +2,7 @@
 
 QVSED is a volatile text editor.
 
-![QVSED screenshot, showing the help message](qvsed_screenie.png)
+![QVSED screenshot, showing the help message](qvsed-screenshot.png)
 
 "Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded. Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata. You may be prompted if you're about to overwrite a file, but that's up to your OS, not QVSED.
 
