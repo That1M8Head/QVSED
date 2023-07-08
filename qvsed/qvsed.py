@@ -107,7 +107,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
         # Apply the stylesheet to the app
         self.setStyleSheet(stylesheet)
-        
+
     def clear_text_area(self):
         """
         Clear the Text Area.
@@ -341,7 +341,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 QVSED is a stateless, volatile text editor with a minimalist approach, focusing solely on text editing without file metadata or prompts for potentially destructive actions.
 
 This is the Text Area, where the actual editing takes place. Type anything you want into here, and edit as you please.
-Down there, below the Text Area is the Echo Area, where messages and errors will be displayed.
+Down there, at the bottom of the window, is the Echo Area, where messages and errors will be displayed.
 On the left of the QVSED window is the Action Deck, containing commands to clear the Text Area, open or save a file, display this help text, toggle in and out of full screen mode or quit QVSED.
 
 I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little venture into my first Qt project.
