@@ -52,6 +52,7 @@ class QVSEDWindow(QMainWindow):
         """
         super().__init__()
         self.load_ui_file()
+        self.focus_text_area()
         self.set_text_area_encoding("UTF-8")
         self.set_up_action_deck()
         self.load_config()
@@ -154,6 +155,13 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         echo_area = self.findChild(QLineEdit, "echoArea")
         echo_area.setText(message)
         echo_area.setCursorPosition(0)
+
+    def focus_text_area(self):
+        """
+        Set the Text Area to have focus.
+        """
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area.setFocus()
 
     def generate_config(self):
         """
