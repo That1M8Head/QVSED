@@ -80,12 +80,24 @@ On Windows, the configuration file will be stored at `C:\Users\<username>\AppDat
 
 On *nix systems, the configuration file will be stored at `~/.config/QVSED/config.py`, where `~` is your home directory (`/home/<username>`).
 
-At the moment, QVSED currently only supports two options to configure, `font_family` and `font_size`.
+As of QVSED 1.3.0, you can customise the font and the colour scheme.
 
 ```python
 # The default QVSED config.
+
+# Font
 font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
 font_size = 11
+
+# Colours
+text_color = "white"
+background_color = "#282c34"
+button_background_color = "#393f4a"
+button_hover_background_color = "#31353f"
+button_pressed_background_color = background_color
+scrollbar_background_color = "#31353f"
+scrollbar_handle_background_color = "#393f4a"
+scrollbar_handle_hover_background_color = "#555B67"
 ```
 
 Keep in mind that `font_family` *must* be a list. If you want only one font, specify:
