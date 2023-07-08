@@ -14,7 +14,7 @@ import importlib.util
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QWidget,
     QFileDialog, QPlainTextEdit, QLineEdit,
-    QAction, QShortcut,
+    QAction, QShortcut
 )
 from PyQt5.QtGui import QKeySequence, QFont
 from PyQt5.QtCore import QTextCodec
@@ -57,6 +57,93 @@ class QVSEDWindow(QMainWindow):
         self.load_config()
         self.set_up_fonts()
 
+    def apply_style_sheet(self):
+        """
+        Generate and apply a style sheet based on the config.py file.
+        """
+
+        stylesheet = f"""QMainWindow, QLabel, QPushButton, #textArea, #echoArea {{
+    color: {self.text_color};
+    background: {self.background_color};
+}}
+
+QWidget#centralwidget QPushButton {{
+    border: 2px solid #31353f;
+    background: {self.button_background_color};
+    padding: 2px;
+}}
+
+QWidget#centralwidget QPushButton:hover {{
+    background: {self.button_hover_background_color};
+}}
+
+QWidget#centralwidget QPushButton:pressed {{
+    background: {self.button_pressed_background_color};
+}}
+
+QScrollBar:vertical {{
+    background-color: {self.scrollbar_background_color};
+    width: 16px;
+    margin: 16px 0 16px 0;
+}}
+
+QScrollBar::handle:vertical {{
+    background-color: {self.scrollbar_handle_background_color};
+    min-height: 20px;
+}}
+
+QScrollBar::handle:vertical:hover {{
+    background-color: {self.scrollbar_handle_hover_background_color};
+}}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+    background: none;
+}}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
+    background: none;
+}}
+        """
+
+        # Apply the stylesheet to the app
+        self.setStyleSheet(stylesheet)
+        
+    def clear_text_area(self):
+        """
+        Clear the Text Area.
+        """
+        text_area = self.findChild(QPlainTextEdit, "textArea")
+
+        if text_area.toPlainText() == "":
+            self.echo_area_update("Text Area is already blank.")
+            return
+
+        text_area.clear()
+
+        self.echo_area_update("Text Area has been cleared.")
+
+    def connect_command_buttons(self):
+        """
+        Connect the Action Deck command buttons to their respective functions.
+        """
+        self.findChild(QPushButton, "clearButton").clicked.connect(self.clear_text_area)
+        self.findChild(QPushButton, "saveButton").clicked.connect(self.save_text_contents)
+        self.findChild(QPushButton, "openButton").clicked.connect(self.load_from_file)
+        self.findChild(QPushButton, "helpButton").clicked.connect(self.show_help)
+        self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_app)
+        self.findChild(QPushButton, "fullscreenButton").clicked.connect(self.toggle_fullscreen)
+
+    def connect_key_bindings(self):
+        """
+        Connect the Action Deck keybindings to their respective functions.
+        """
+        self.clear_shortcut.activated.connect(self.clear_text_area)
+        self.save_shortcut.activated.connect(self.save_text_contents)
+        self.open_shortcut.activated.connect(self.load_from_file)
+        self.help_shortcut.activated.connect(self.show_help)
+        self.quit_shortcut.activated.connect(self.quit_app)
+        self.fullscreen_shortcut.activated.connect(self.toggle_fullscreen)
+
     def echo_area_update(self, message):
         """
         Update the Echo Area with the given message.
@@ -66,23 +153,7 @@ class QVSEDWindow(QMainWindow):
         """
         echo_area = self.findChild(QLineEdit, "echoArea")
         echo_area.setText(message)
-
-    def set_text_area_encoding(self, encoding):
-        """
-        Set the Text Area encoding.
-
-        Args:
-            encoding (str): The encoding to set for the Text Area.
-        """
-        QTextCodec.setCodecForLocale(QTextCodec.codecForName(encoding))
-
-    def load_ui_file(self):
-        """
-        Load the UI file for the QVSED window.
-        """
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        ui_file = os.path.join(current_dir, "qvsed.ui")
-        loadUi(ui_file, self)
+        echo_area.setCursorPosition(0)
 
     def generate_config(self):
         """
@@ -134,90 +205,51 @@ class QVSEDWindow(QMainWindow):
         self.font_family = qvsed_config.font_family
         self.font_size = qvsed_config.font_size
 
-    def set_up_fonts(self):
-        """
-        Set up the fonts for the QVSED window.
-        """
-        font = QFont()
-        font.setFamilies(self.font_family)
-        font.setPointSize(self.font_size)
-        QApplication.instance().setFont(font)
-        self.update_widget_fonts(self)
+        # Load the colour scheme settings from the config file
+        # We use the shorter American spellings because it's standard, I guess
+        try:
+            self.text_color = qvsed_config.text_color
+            self.background_color = qvsed_config.background_color
+            self.button_background_color = qvsed_config.button_background_color
+            self.button_hover_background_color = qvsed_config.button_hover_background_color
+            self.button_pressed_background_color = qvsed_config.button_pressed_background_color
+            self.scrollbar_background_color = qvsed_config.scrollbar_background_color
+            self.scrollbar_handle_background_color = qvsed_config.scrollbar_handle_background_color
+            self.scrollbar_handle_hover_background_color = qvsed_config.scrollbar_handle_hover_background_color
+            self.apply_style_sheet()
+        except AttributeError as error:
+            self.echo_area_update(f"Check config.py: {str(error)}")
 
-    def set_up_actions(self):
+    def load_from_file(self):
         """
-        Set up the Action Deck commands for the QVSED window.
-        """
-        self.clear_action = QAction("Clear Text", self)
-        self.save_action = QAction("Save File", self)
-        self.open_action = QAction("Open File", self)
-        self.help_action = QAction("Get Help", self)
-        self.quit_action = QAction("Quit QVSED", self)
-
-    def set_up_shortcuts(self):
-        """
-        Set up the key bindings for the Action Deck commands.
-        """
-        self.clear_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
-        self.save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
-        self.open_shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
-        self.help_shortcut = QShortcut(QKeySequence("Ctrl+H"), self)
-        self.quit_shortcut = QShortcut(QKeySequence("Alt+Q"), self)
-        self.fullscreen_shortcut = QShortcut(QKeySequence("Alt+F"), self)
-
-    def set_up_event_handlers(self):
-        """
-        Set up the event handlers for the Action Deck.
-        """
-        self.connect_key_bindings()
-        self.connect_command_buttons()
-
-    def connect_key_bindings(self):
-        """
-        Connect the Action Deck keybindings to their respective functions.
-        """
-        self.clear_shortcut.activated.connect(self.clear_text_area)
-        self.save_shortcut.activated.connect(self.save_text_contents)
-        self.open_shortcut.activated.connect(self.load_from_file)
-        self.help_shortcut.activated.connect(self.show_help)
-        self.quit_shortcut.activated.connect(self.quit_app)
-        self.fullscreen_shortcut.activated.connect(self.toggle_fullscreen)
-
-    def connect_command_buttons(self):
-        """
-        Connect the Action Deck command buttons to their respective functions.
-        """
-        self.findChild(QPushButton, "clearButton").clicked.connect(self.clear_text_area)
-        self.findChild(QPushButton, "saveButton").clicked.connect(self.save_text_contents)
-        self.findChild(QPushButton, "openButton").clicked.connect(self.load_from_file)
-        self.findChild(QPushButton, "helpButton").clicked.connect(self.show_help)
-        self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_app)
-        self.findChild(QPushButton, "fullscreenButton").clicked.connect(self.toggle_fullscreen)
-
-    def set_up_action_deck(self):
-        """
-        Set up the Action Deck for the QVSED window.
-
-        This module does nothing by itself, but it's used to run the
-        below three modules, which are all components of the Action Deck.
-        """
-        self.set_up_actions()
-        self.set_up_shortcuts()
-        self.set_up_event_handlers()
-
-    def clear_text_area(self):
-        """
-        Clear the Text Area.
+        Open a file dialog, and load the contents of a file into the Text Area.
         """
         text_area = self.findChild(QPlainTextEdit, "textArea")
 
-        if text_area.toPlainText() == "":
-            self.echo_area_update("Text Area is already blank.")
-            return
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
 
-        text_area.clear()
+        if file_path:
+            try:
+                with open(file_path, "r", encoding="utf-8") as file:
+                    text_area.setPlainText(file.read())
+                file_name = os.path.basename(file_path)
+                self.echo_area_update(f"Opened file {file_name}.")
+            except Exception as error:
+                self.echo_area_update(f"Error opening file: {str(error)}")
 
-        self.echo_area_update("Text Area has been cleared.")
+    def load_ui_file(self):
+        """
+        Load the UI file for the QVSED window.
+        """
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        ui_file = os.path.join(current_dir, "qvsed.ui")
+        loadUi(ui_file, self)
+
+    def quit_app(self):
+        """
+        Quit QVSED.
+        """
+        QApplication.quit()
 
     def save_text_contents(self):
         """
@@ -240,22 +272,63 @@ class QVSEDWindow(QMainWindow):
             except Exception as error:
                 self.echo_area_update(f"Error saving file: {str(error)}")
 
-    def load_from_file(self):
+    def set_text_area_encoding(self, encoding):
         """
-        Open a file dialog, and load the contents of a file into the Text Area.
+        Set the Text Area encoding.
+
+        Args:
+            encoding (str): The encoding to set for the Text Area.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        QTextCodec.setCodecForLocale(QTextCodec.codecForName(encoding))
 
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
+    def set_up_action_deck(self):
+        """
+        Set up the Action Deck for the QVSED window.
 
-        if file_path:
-            try:
-                with open(file_path, "r", encoding="utf-8") as file:
-                    text_area.setPlainText(file.read())
-                file_name = os.path.basename(file_path)
-                self.echo_area_update(f"Opened file {file_name}.")
-            except Exception as error:
-                self.echo_area_update(f"Error opening file: {str(error)}")
+        This module does nothing by itself, but it's used to run the
+        below three modules, which are all components of the Action Deck.
+        """
+        self.set_up_actions()
+        self.set_up_event_handlers()
+        self.set_up_shortcuts()
+
+    def set_up_actions(self):
+        """
+        Set up the Action Deck commands for the QVSED window.
+        """
+        self.clear_action = QAction("Clear Text", self)
+        self.save_action = QAction("Save File", self)
+        self.open_action = QAction("Open File", self)
+        self.help_action = QAction("Get Help", self)
+        self.quit_action = QAction("Quit QVSED", self)
+
+    def set_up_event_handlers(self):
+        """
+        Set up the event handlers for the Action Deck.
+        """
+        self.connect_key_bindings()
+        self.connect_command_buttons()
+
+    def set_up_fonts(self):
+        """
+        Set up the fonts for the QVSED window.
+        """
+        font = QFont()
+        font.setFamilies(self.font_family)
+        font.setPointSize(self.font_size)
+        QApplication.instance().setFont(font)
+        self.update_widget_fonts(self)
+
+    def set_up_shortcuts(self):
+        """
+        Set up the key bindings for the Action Deck commands.
+        """
+        self.clear_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
+        self.save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+        self.open_shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
+        self.help_shortcut = QShortcut(QKeySequence("Ctrl+H"), self)
+        self.quit_shortcut = QShortcut(QKeySequence("Alt+Q"), self)
+        self.fullscreen_shortcut = QShortcut(QKeySequence("Alt+F"), self)
 
     def show_help(self):
         """
@@ -278,12 +351,6 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
         self.echo_area_update("Help message shown in Text Area.")
 
         text_area.setPlainText(help_message)
-
-    def quit_app(self):
-        """
-        Quit QVSED.
-        """
-        QApplication.quit()
 
     def toggle_fullscreen(self):
         """
