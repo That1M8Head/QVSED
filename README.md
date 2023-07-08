@@ -82,7 +82,7 @@ On Windows, the configuration file will be stored at `C:\Users\<username>\AppDat
 
 On *nix systems, the configuration file will be stored at `~/.config/QVSED/config.py`, where `~` is your home directory (`/home/<username>`).
 
-As of QVSED 1.3.0, you can customise the font and the colour scheme.
+As of QVSED 1.3.0, you can customise the font and the colour scheme. For a list of sample colour schemes, [go here](COLOURS.md).
 
 ```python
 # The default QVSED config.
