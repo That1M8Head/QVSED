@@ -8,7 +8,8 @@ See README.md or "Get Help" inside QVSED for more info
 # pylint: disable=attribute-defined-outside-init
 # pylint: disable=broad-exception-caught
 
-import os, sys
+import os
+import sys
 import shutil
 import importlib.util
 import pkg_resources
@@ -56,9 +57,9 @@ class QVSEDWindow(QMainWindow):
         self.focus_text_area()
         self.set_text_area_encoding("UTF-8")
         self.set_up_action_deck()
+        self.echo_area_update(f"Welcome to QVSED v{self.get_qvsed_version()}!")
         self.load_config()
         self.set_up_fonts()
-        self.echo_area_update(f"Welcome to QVSED v{self.get_qvsed_version()}!")
         if self.check_if_file_parameter():
             self.load_from_file(sys.argv[1])
 
@@ -67,22 +68,16 @@ class QVSEDWindow(QMainWindow):
         Generate and apply a style sheet based on the config.py file.
         """
 
-        print(f"{text_color}, {background_color}, {button_color}, {button_focus_color}")
-
-        stylesheet = f"""QMainWindow, QLabel, QPushButton {{
-    color: {text_color};
-    background: {background_color};
+        stylesheet = f"""
+QPlainTextEdit, QLineEdit {{
+    background: {button_focus_color};
+    border: 2px solid {button_color};
 }}
 
 QPushButton {{
-    border: 2px solid {background_color};
+    border: 2px solid {button_focus_color};
     background: {button_color};
     padding: 2px;
-}}
-
-QPlainTextEdit, QLineEdit {{
-    background: {button_color};
-    border: 2px solid {button_color};
 }}
 
 QPushButton:hover {{
@@ -94,7 +89,7 @@ QPushButton:pressed {{
 }}
 
 QScrollBar:vertical {{
-    background-color: {background_color};
+    background-color: {button_focus_color};
     width: 16px;
     margin: 16px 0 16px 0;
 }}
@@ -105,7 +100,7 @@ QScrollBar::handle:vertical {{
 }}
 
 QScrollBar::handle:vertical:hover {{
-    background-color: {button_focus_color};
+    background-color: {button_color};
 }}
 
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
@@ -114,6 +109,11 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
     background: none;
+}}
+
+QMainWindow {{
+    color: {text_color};
+    background: {background_color};
 }}
         """
 

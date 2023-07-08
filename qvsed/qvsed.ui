@@ -43,7 +43,7 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="mainLayout">
       <property name="spacing">
        <number>8</number>
       </property>
@@ -60,9 +60,9 @@
        <number>8</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout" name="elementsLayout">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="actionDeck">
           <item>
            <widget class="QPushButton" name="clearButton">
             <property name="minimumSize">
