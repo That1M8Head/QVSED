@@ -1,6 +1,10 @@
 # QVSED - Qt-based Volatile Small Editor
 
-QVSED is a volatile text editor. "Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded. Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata. You may be prompted if you're about to overwrite a file, but that's up to your OS, not QVSED.
+QVSED is a volatile text editor.
+
+![QVSED screenshot, showing the help message](qvsed_screenie.png)
+
+"Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded. Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata. You may be prompted if you're about to overwrite a file, but that's up to your OS, not QVSED.
 
 QVSED follows the philosophy of ultra-minimalism, with its heavy emphasis on just editing text and nothing more. QVSED's editing style is text-based, not file-based like basically every other editor out there. Text goes in, from a file, and then text later comes out, into another or perhaps the same file.
 
@@ -29,8 +33,6 @@ QVSED is free software, licensed under the GNU General Public License version 3 
 QVSED is broken up into three parts - the Action Deck, the Text Area and the Echo Area.
 
 The Action Deck contains editing commands, the Text Area is a text area, and the Echo Area is where messages will be printed.
-
-![QVSED screenshot, showing the help message](qsved_screenie.png)
 
 ## Action Deck
 
