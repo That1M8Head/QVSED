@@ -58,7 +58,7 @@ class QVSEDWindow(QMainWindow):
         self.set_up_action_deck()
         self.load_config()
         self.set_up_fonts()
-        self.echo_area_update(f"Welcome to QVSED version {self.get_qvsed_version()}!")
+        self.echo_area_update(f"Welcome to QVSED v{self.get_qvsed_version()}!")
 
     def apply_style_sheet(self):
         """
