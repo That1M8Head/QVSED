@@ -383,9 +383,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Set up the fonts for the QVSED window.
         """
+        text_area = self.findChild(QPlainTextEdit, "textArea")
         font = QFont()
         font.setFamilies(self.font_family)
         font.setPointSize(self.font_size)
+        text_area.setTabStopWidth(4 * text_area.fontMetrics().width(' '))
         QApplication.instance().setFont(font)
         self.update_widget_fonts(self)
 
