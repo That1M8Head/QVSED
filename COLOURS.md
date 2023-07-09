@@ -8,12 +8,12 @@ The following colour schemes are arranged in ascending order, from the earliest 
 
 If this file gets too big I'll reorganise them in alphabetical order or something.
 
-### Monokai Classic
+### Monokai
 
-![QVSED v1.3.7 in Monokai Classic](colour-schemes/monokai-classic.png)
+![QVSED v1.3.7 in Monokai](colour-schemes/monokai-classic.png)
 
 ```python
-# Monokai Classic, taken from sampling Doom Emacs' doom-monokai-classic theme
+# Monokai, taken from sampling Doom Emacs' doom-monokai-classic theme
 text_color = "#F8F8F2"
 background_color = "#1D1F19"
 button_color = "#272822"
@@ -32,4 +32,26 @@ button_color = "#000000"
 button_focus_color = "#111111"
 ```
 
-More will be added when I care enough to do so.
+### Buttercream
+
+![QVSED v1.4.0 in Buttercream](colour-schemes/buttercream.png)
+
+```python
+# Buttercream, a light-yellow theme
+text_color = "#000000"
+background_color = "#ffffda"
+button_color = "#fff7b1"
+button_focus_color = "#fffad3"
+```
+
+### Banana
+
+![QVSED v1.4.0 in Banana](colour-schemes/banana.png)
+
+```python
+# Banana, a light theme inspired by bananas
+text_color = "#331f00"
+background_color = "#fff3bf"
+button_color = "#b7eb76"
+button_focus_color = "#f0ee82"
+```
