@@ -12,7 +12,7 @@ QVSED can be used as a simple scratchpad or throwaway editor, as well as a gener
 
 QVSED is a PyQt5 rewrite of my older project, [ASMED (Another SMol EDitor)](https://github.com/That1M8Head/ASMED), which was written using Windows Forms, and was quite obviously only for Windows.
 
-QVSED aims to replace ASMED by offering cross-platform support and the advantages of a lightweight editor without the overhead of .NET.
+QVSED aims to replace ASMED by offering cross-platform support and the advantages of a lightweight editor without the overhead of .NET, as well as provide features that I never thought to add to ASMED because it was .NET only.
 
 ## Installing
 
@@ -34,11 +34,9 @@ QVSED is broken up into three parts - the Action Deck, the Text Area and the Ech
 
 The Action Deck contains editing commands, the Text Area is a text area, and the Echo Area is where messages will be printed.
 
-## Action Deck
+## Keyboard Shortcuts
 
-The Action Deck, positioned on the left side of the QVSED window, containing commands to clear the Text Area, open or save a file, display this help text, toggle in and out of full screen mode or quit QVSED.
-
-The Action Deck is on the left rather than on the top like a traditional menu bar, so that the buttons can be bigger while still providing enough screen real estate for the Text Area.
+QVSED contains a mix of bindings from the original ASMED, Vim-style bindings and Emacs-style bindings.
 
 ### Key Prefixes
 
@@ -47,9 +45,13 @@ The Action Deck is on the left rather than on the top like a traditional menu ba
 
 When you see `<C-n>`, for instance, that means pressing `Ctrl+N` on Windows/Linux, or `⌘N` on macOS.
 
+This is a Qt thing, not a QVSED thing, and there isn't much of a reason to change it.
+
 This kind of notation was inspired by Emacs (though, QVSED uses `A-` instead of `M-` to be clearer).
 
-### Commands
+### Action Deck bindings
+
+These bindings are evolutions of the original ASMED key bindings.
 
 + **Clear Text** - `<C-n>` - Clear the Text Area. Think of it like New File.
 + **Open File** - `<C-f>` - Launch a file picker and load the chosen file's contents into the Text Area.
@@ -57,6 +59,30 @@ This kind of notation was inspired by Emacs (though, QVSED uses `A-` instead of 
 + **Full Screen** - `<A-f>` - Toggle full screen mode.
 + **Get Help** - `<C-h>` - Show a help message in the Text Area. This will overwrite your current work.
 + **Quit QVSED**  - `<A-q>` - Quit QVSED on the spot with no confirmation dialog.
+
+### Motion bindings
+
+These bindings are for the most part inspired by Vim, if not Emacs.
+
++ `<A-h>` - Move left a character. Inspired by Vim's `h`.
++ `<A-j>` - Move down a character. Inspired by Vim's `j`.
++ `<A-k>` - Move up a character. Inspired by Vim's `k`.
++ `<A-l>` - Move right a character. Inspired by Vim's `l`.
+
++ `<A-u>` - Move up half a page. Inspired by Vim's `<C-u>`.
++ `<A-d>` - Move up half a page. Inspired by Vim's `<C-d>`.
+
++ `<A-w>` - Move forward a word. Inspired by Vim's `w`.
++ `<A-b>` - Move back a word. Inspired by Vim's `b`.
+
++ `<A-a>` - Move to the start of the line. Inspired by Emacs' `<C-a>`.
++ `<A-e>` - Move to the end of the line. Inspired by Emacs' `<C-e>`.
+
+## Action Deck
+
+The Action Deck, positioned on the left side of the QVSED window, containing commands to clear the Text Area, open or save a file, display this help text, toggle in and out of full screen mode or quit QVSED.
+
+The Action Deck is on the left rather than on the top like a traditional menu bar, so that the buttons can be bigger while still providing enough screen real estate for the Text Area.
 
 ## Text Area
 
@@ -82,7 +108,7 @@ On Windows, the configuration file will be stored at `C:\Users\<username>\AppDat
 
 On *nix systems, the configuration file will be stored at `~/.config/QVSED/config.py`, where `~` is your home directory (`/home/<username>`).
 
-As of QVSED 1.3.0, you can customise the font and the colour scheme. For a list of sample colour schemes, [go here](COLOURS.md).
+As of QVSED 1.3.0, you can customise the colour scheme in addition to the font. For a list of sample colour schemes, [go here](COLOURS.md).
 
 ```python
 # The default QVSED config.
