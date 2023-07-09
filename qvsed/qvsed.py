@@ -14,12 +14,12 @@ import shutil
 import importlib.util
 import pkg_resources
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QPushButton, QWidget,
-    QFileDialog, QPlainTextEdit, QLineEdit,
+    QApplication, QMainWindow, QWidget, QFileDialog,
     QAction, QShortcut
 )
 from PyQt5.QtGui import (
-    QKeySequence, QFont, QDragEnterEvent, QDropEvent
+    QKeySequence, QFont, QDragEnterEvent, QDropEvent,
+    QTextCursor
 )
 from PyQt5.QtCore import QTextCodec
 from PyQt5.uic import loadUi
@@ -142,7 +142,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Clear the Text Area.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
 
         if text_area.toPlainText() == "":
             self.echo_area_update("Text Area is already blank.")
@@ -156,23 +156,34 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Connect the Action Deck command buttons to their respective functions.
         """
-        self.findChild(QPushButton, "clearButton").clicked.connect(self.clear_text_area)
-        self.findChild(QPushButton, "saveButton").clicked.connect(self.save_text_contents)
-        self.findChild(QPushButton, "openButton").clicked.connect(self.load_from_file)
-        self.findChild(QPushButton, "helpButton").clicked.connect(self.show_help)
-        self.findChild(QPushButton, "quitButton").clicked.connect(self.quit_app)
-        self.findChild(QPushButton, "fullscreenButton").clicked.connect(self.toggle_fullscreen)
+        self.clearButton.clicked.connect(self.clear_text_area)
+        self.saveButton.clicked.connect(self.save_text_contents)
+        self.openButton.clicked.connect(self.load_from_file)
+        self.helpButton.clicked.connect(self.show_help)
+        self.quitButton.clicked.connect(self.quit_app)
+        self.fullscreenButton.clicked.connect(self.toggle_fullscreen)
 
     def connect_key_bindings(self):
         """
-        Connect the Action Deck keybindings to their respective functions.
+        Connect the QVSED keybindings to their respective functions.
         """
+        # Action Deck
         self.clear_shortcut.activated.connect(self.clear_text_area)
         self.save_shortcut.activated.connect(self.save_text_contents)
         self.open_shortcut.activated.connect(self.load_from_file)
         self.help_shortcut.activated.connect(self.show_help)
         self.quit_shortcut.activated.connect(self.quit_app)
         self.fullscreen_shortcut.activated.connect(self.toggle_fullscreen)
+
+        # Cursor movement
+        self.shortcut_up.activated.connect(lambda: self.move_cursor(QTextCursor.Up))
+        self.shortcut_down.activated.connect(lambda: self.move_cursor(QTextCursor.Down))
+        self.shortcut_left.activated.connect(lambda: self.move_cursor(QTextCursor.Left))
+        self.shortcut_right.activated.connect(lambda: self.move_cursor(QTextCursor.Right))
+
+        # Page movement
+        self.shortcut_pgup.activated.connect(lambda: self.move_half_page(QTextCursor.Up))
+        self.shortcut_pgdn.activated.connect(lambda: self.move_half_page(QTextCursor.Down))
 
     def drag_enter_event(self, event: QDragEnterEvent):
         """
@@ -188,7 +199,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
             self.load_from_file(file_path)
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
         text_area.repaint()
 
     def echo_area_update(self, message):
@@ -198,7 +209,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         Args:
             message (str): The message to display in the Echo Area.
         """
-        echo_area = self.findChild(QLineEdit, "echoArea")
+        echo_area = self.echoArea
         echo_area.setText(message)
         echo_area.setCursorPosition(0)
 
@@ -206,7 +217,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Set the Text Area to have focus.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
         text_area.setFocus()
 
     def generate_config(self):
@@ -283,7 +294,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Open a file dialog, and load the contents of a file into the Text Area.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
 
         if not file_path:
             file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
@@ -305,6 +316,38 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         ui_file = os.path.join(current_dir, "qvsed.ui")
         loadUi(ui_file, self)
 
+    def move_cursor(self, direction):
+        """
+        Move the cursor in the Text Area.
+
+        Used for the Vim-style A-h, A-j, A-k and A-l commands.
+        """
+        text_area = self.textArea
+        cursor = text_area.textCursor()
+        cursor.movePosition(direction)
+        text_area.setTextCursor(cursor)
+
+    def move_half_page(self, direction):
+        """
+        Move the page up or down in the Text Area.
+
+        Used for the Vim-style A-u and A-d commands.
+        """
+        text_area = self.textArea
+        scroll_bar = text_area.verticalScrollBar()
+        scroll_value = scroll_bar.value()
+        scroll_maximum = scroll_bar.maximum()
+        scroll_step = scroll_bar.singleStep()
+
+        half_page_steps = int(scroll_bar.pageStep() / 2)
+
+        if direction == QTextCursor.Up:
+            scroll_bar.setValue(max(scroll_value - half_page_steps * scroll_step, 0))
+        elif direction == QTextCursor.Down:
+            scroll_bar.setValue(min(scroll_value + half_page_steps * scroll_step, scroll_maximum))
+
+        text_area.verticalScrollBar().valueChanged.emit(scroll_bar.value())
+
     def quit_app(self):
         """
         Quit QVSED.
@@ -315,7 +358,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Open a file dialog, and save the contents of the Text Area to a file.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
 
         if text_area.toPlainText() == "":
             self.echo_area_update("Text Area is blank, will not save.")
@@ -373,7 +416,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Set up the event handlers for the Text Area.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
 
         text_area.dragEnterEvent = self.drag_enter_event
         text_area.dragMoveEvent = self.drag_enter_event
@@ -383,7 +426,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Set up the fonts for the QVSED window.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
         font = QFont()
         font.setFamilies(self.font_family)
         font.setPointSize(self.font_size)
@@ -393,8 +436,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
     def set_up_shortcuts(self):
         """
-        Set up the key bindings for the Action Deck commands.
+        Set up the key bindings for QVED.
         """
+        # Action Deck
         self.clear_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
         self.save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
         self.open_shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
@@ -402,11 +446,19 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         self.quit_shortcut = QShortcut(QKeySequence("Alt+Q"), self)
         self.fullscreen_shortcut = QShortcut(QKeySequence("Alt+F"), self)
 
+        # Vim-style movement with Alt/Option key
+        self.shortcut_left = QShortcut(QKeySequence("Alt+H"), self)
+        self.shortcut_down = QShortcut(QKeySequence("Alt+J"), self)
+        self.shortcut_up = QShortcut(QKeySequence("Alt+K"), self)
+        self.shortcut_right = QShortcut(QKeySequence("Alt+L"), self)
+        self.shortcut_pgup = QShortcut(QKeySequence("Alt+U"), self)
+        self.shortcut_pgdn = QShortcut(QKeySequence("Alt+D"), self)
+
     def show_help(self):
         """
         Display the help message in the Text Area.
         """
-        text_area = self.findChild(QPlainTextEdit, "textArea")
+        text_area = self.textArea
 
         help_message = """QVSED - Qt-based Volatile Small Editor
 ========================================
