@@ -8,6 +8,11 @@ The following colour schemes are arranged in ascending order, from the earliest 
 
 If this file gets too big I'll reorganise them in alphabetical order or something.
 
+Themes made before QVSED v1.4.1 did not include `text_area_color` or `echo_area_color`,
+so their updated variants set them to `button_hover_color` like how they were before.
+Similarly, `button_pressed_color` didn't exist before v1.4.1, so the older themes use
+`background_color`.
+
 ### Monokai
 
 ![QVSED v1.3.7 in Monokai](colour-schemes/monokai-classic.png)
@@ -17,7 +22,10 @@ If this file gets too big I'll reorganise them in alphabetical order or somethin
 text_color = "#F8F8F2"
 background_color = "#1D1F19"
 button_color = "#272822"
-button_focus_color = "#171819"
+button_hover_color = "#171819"
+button_pressed_color = background_color
+text_area_color = button_hover_color
+echo_area_color = button_hover_color
 ```
 
 ### Codebreaker
@@ -29,7 +37,10 @@ button_focus_color = "#171819"
 text_color = "#00FF00"
 background_color = "#000000"
 button_color = "#000000"
-button_focus_color = "#111111"
+button_hover_color = "#111111"
+button_pressed_color = background_color
+text_area_color = button_hover_color
+echo_area_color = button_hover_color
 ```
 
 ### Buttercream
@@ -41,7 +52,10 @@ button_focus_color = "#111111"
 text_color = "#000000"
 background_color = "#ffffda"
 button_color = "#fff7b1"
-button_focus_color = "#fffad3"
+button_hover_color = "#fffad3"
+button_pressed_color = background_color
+text_area_color = button_hover_color
+echo_area_color = button_hover_color
 ```
 
 ### Banana
@@ -53,5 +67,8 @@ button_focus_color = "#fffad3"
 text_color = "#331f00"
 background_color = "#fff3bf"
 button_color = "#b7eb76"
-button_focus_color = "#f0ee82"
+button_hover_color = "#f0ee82"
+button_pressed_color = background_color
+text_area_color = button_hover_color
+echo_area_color = button_hover_color
 ```

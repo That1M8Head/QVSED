@@ -58,7 +58,7 @@ class QVSEDWindow(QMainWindow):
         """
         super().__init__()
         self.load_ui_file()
-        self.focus_text_area()
+        self.hover_text_area()
         self.install_event_filter()
         self.set_text_area_encoding("UTF-8")
         self.set_up_text_area_handlers()
@@ -69,7 +69,7 @@ class QVSEDWindow(QMainWindow):
         if self.check_if_file_parameter():
             self.load_from_file(sys.argv[1])
 
-    def apply_style_sheet(self, text_color, background_color, button_color, button_focus_color):
+    def apply_style_sheet(self, text_color, background_color, button_color, button_hover_color, button_pressed_color, text_area_color, echo_area_color):
         """
         Generate and apply a style sheet based on the config.py file.
         """
@@ -81,31 +81,39 @@ QMainWindow {{
 }}
 
 QPlainTextEdit, QLineEdit {{
-    color: {text_color};
-    background: {button_focus_color};
     padding: 8px;
     border: none;
 }}
 
+QPlainTextEdit {{
+    color: {text_color};
+    background: {text_area_color};
+}}
+
+QLineEdit {{
+    color: {text_color};
+    background: {echo_area_color};
+}}
+
 QPushButton {{
     color: {text_color};
-    border: 2px solid {button_focus_color};
+    border: 2px solid {button_hover_color};
     background: {button_color};
     padding: 2px;
 }}
 
 QPushButton:hover {{
     color: {text_color};
-    background: {button_focus_color};
+    background: {button_hover_color};
 }}
 
 QPushButton:pressed {{
     color: {text_color};
-    background: {background_color};
+    background: {button_pressed_color};
 }}
 
 QScrollBar:vertical {{
-    background-color: {button_focus_color};
+    background-color: {button_hover_color};
     width: 16px;
     margin: 16px 0 16px 0;
 }}
@@ -229,9 +237,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         echo_area.setCursorPosition(0)
         self.echo_area_timeout_clear(3000)
 
-    def focus_text_area(self):
+    def hover_text_area(self):
         """
-        Set the Text Area to have focus.
+        Set the Text Area to have hover.
         """
         text_area = self.textArea
         text_area.setFocus()
@@ -307,14 +315,17 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
         # Load the colour scheme settings from the config file
         # We use the shorter American spellings because it's standard, I guess
-        try:
-            text_color = qvsed_config.text_color
-            background_color = qvsed_config.background_color
-            button_color = qvsed_config.button_color
-            button_focus_color = qvsed_config.button_focus_color
-            self.apply_style_sheet(text_color, background_color, button_color, button_focus_color)
-        except AttributeError as error:
-            self.echo_area_update(f"Check config.py: {str(error)}")
+        text_color = getattr(qvsed_config, 'text_color', None)
+        background_color = getattr(qvsed_config, 'background_color', None)
+        button_color = getattr(qvsed_config, 'button_color', None)
+        button_hover_color = getattr(qvsed_config, 'button_hover_color', getattr(qvsed_config, 'button_focus_color', None))
+        button_pressed_color = getattr(qvsed_config, 'button_pressed_color', background_color)
+        text_area_color = getattr(qvsed_config, 'text_area_color', button_hover_color)
+        echo_area_color = getattr(qvsed_config, 'echo_area_color', button_hover_color)
+        self.apply_style_sheet(text_color, background_color, button_color, button_hover_color, button_pressed_color, text_area_color, echo_area_color)
+        if None in (text_color, background_color, button_color, button_hover_color):
+            self.echo_area_update("config.py appears to be broken, generating a new one.")
+            self.generate_config()
 
     def load_from_file(self, file_path = None):
         """
@@ -496,7 +507,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
         help_message = """QVSED - Qt-based Volatile Small Editor
 ========================================
-QVSED is a stateless, volatile text editor with a minimalist approach, focusing solely on text editing without file metadata or prompts for potentially destructive actions.
+QVSED is a stateless, volatile text editor with a minimalist approach, hovering solely on text editing without file metadata or prompts for potentially destructive actions.
 
 This is the Text Area, where the actual editing takes place. Type anything you want into here, and edit as you please.
 Down there, at the bottom of the window, is the Echo Area, where messages and errors will be displayed.

@@ -122,6 +122,9 @@ text_color = "#FFFFFF"
 background_color = "#282C34"
 button_color = "#393F4A"
 button_focus_color = "#31353F"
+button_pressed_color = "#282C34"
+text_area_color = "#31353F"
+echo_area_color = "#31353F"
 ```
 
 Keep in mind that `font_family` *must* be a list. If you want only one font, specify `font_family = ["My Font"]`.
