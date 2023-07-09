@@ -21,7 +21,9 @@ from PyQt5.QtGui import (
     QKeySequence, QFont, QDragEnterEvent, QDropEvent,
     QTextCursor
 )
-from PyQt5.QtCore import QTextCodec
+from PyQt5.QtCore import (
+    Qt, QTextCodec, QEvent, QObject, QTimer
+)
 from PyQt5.uic import loadUi
 
 
@@ -57,6 +59,7 @@ class QVSEDWindow(QMainWindow):
         super().__init__()
         self.load_ui_file()
         self.focus_text_area()
+        self.install_event_filter()
         self.set_text_area_encoding("UTF-8")
         self.set_up_text_area_handlers()
         self.set_up_action_deck()
@@ -180,6 +183,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         self.shortcut_down.activated.connect(lambda: self.move_cursor(QTextCursor.Down))
         self.shortcut_left.activated.connect(lambda: self.move_cursor(QTextCursor.Left))
         self.shortcut_right.activated.connect(lambda: self.move_cursor(QTextCursor.Right))
+        self.shortcut_home.activated.connect(lambda: self.move_cursor(QTextCursor.StartOfLine))
+        self.shortcut_end.activated.connect(lambda: self.move_cursor(QTextCursor.EndOfLine))
+        self.shortcut_fwrdword.activated.connect(lambda: self.move_cursor(QTextCursor.NextWord))
+        self.shortcut_backword.activated.connect(lambda: self.move_cursor(QTextCursor.PreviousWord))
 
         # Page movement
         self.shortcut_pgup.activated.connect(lambda: self.move_half_page(QTextCursor.Up))
@@ -202,16 +209,25 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         text_area = self.textArea
         text_area.repaint()
 
+    def echo_area_timeout_clear(self, interval):
+        """
+        Clear the Echo Area after a duration of time.
+        """
+        echo_area = self.echoArea
+        self.clear_timer = QTimer()
+        self.clear_timer.setSingleShot(True)
+        self.clear_timer.setInterval(interval)
+        self.clear_timer.timeout.connect(echo_area.clear)
+        self.clear_timer.start()
+
     def echo_area_update(self, message):
         """
         Update the Echo Area with the given message.
-
-        Args:
-            message (str): The message to display in the Echo Area.
         """
         echo_area = self.echoArea
         echo_area.setText(message)
         echo_area.setCursorPosition(0)
+        self.echo_area_timeout_clear(3000)
 
     def focus_text_area(self):
         """
@@ -257,6 +273,16 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
             return pkg_resources.get_distribution('qvsed').version
         except pkg_resources.DistributionNotFound:
             return "?.?.?"
+
+    def install_event_filter(self):
+        """
+        Install the `keyPressFilter` to the Text Area.
+
+        Used to handle incorrect key combinations.
+        """
+        text_area = self.textArea
+        self.keyPressFilter = KeyPressFilter(self)
+        text_area.installEventFilter(self.keyPressFilter)
 
     def load_config(self):
         """
@@ -436,7 +462,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
     def set_up_shortcuts(self):
         """
-        Set up the key bindings for QVED.
+        Set up the key bindings for QVSED.
         """
         # Action Deck
         self.clear_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
@@ -451,8 +477,16 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         self.shortcut_down = QShortcut(QKeySequence("Alt+J"), self)
         self.shortcut_up = QShortcut(QKeySequence("Alt+K"), self)
         self.shortcut_right = QShortcut(QKeySequence("Alt+L"), self)
+
         self.shortcut_pgup = QShortcut(QKeySequence("Alt+U"), self)
         self.shortcut_pgdn = QShortcut(QKeySequence("Alt+D"), self)
+
+        self.shortcut_fwrdword = QShortcut(QKeySequence("Alt+W"), self)
+        self.shortcut_backword = QShortcut(QKeySequence("Alt+B"), self)
+
+        # Emacs-style C-a and C-e, but with Alt instead
+        self.shortcut_home = QShortcut(QKeySequence("Alt+A"), self)
+        self.shortcut_end = QShortcut(QKeySequence("Alt+E"), self)
 
     def show_help(self):
         """
@@ -502,6 +536,48 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
         for child_widget in widget.findChildren(QWidget):
             self.update_widget_fonts(child_widget)
 
+class KeyPressFilter(QObject):
+    """
+    Subclasses QObject.
+    """
+    def __init__(self, window):
+        super().__init__()
+        self.window = window
+
+    def eventFilter(self, obj, event):
+        # yes, Pylint, I know it's not snake_case, wanna fight about it?
+        """
+        Override the eventFilter and use QEvent.KeyPress to handle invalid key bindings.
+        """
+        if event.type() == QEvent.KeyPress:
+            if (event.modifiers() & (Qt.ControlModifier | Qt.AltModifier)) and event.key() not in [Qt.Key_Control, Qt.Key_Alt, Qt.Key_Shift]:
+                keys = []
+                if event.modifiers() & Qt.ControlModifier:
+                    keys.append("C")
+                if event.modifiers() & Qt.AltModifier:
+                    keys.append("A")
+                if event.modifiers() & Qt.ShiftModifier:
+                    keys.append("S")
+                if event.key() != Qt.Key_No:
+                    is_os_shortcut = any(event.matches(shortcut) for shortcut in [
+                        QKeySequence.Copy, QKeySequence.Cut, QKeySequence.Paste,
+                        QKeySequence.Undo, QKeySequence.Redo, QKeySequence.SelectAll,
+                        QKeySequence.MoveToPreviousWord, QKeySequence.MoveToNextWord,
+                        QKeySequence.SelectPreviousWord, QKeySequence.SelectNextWord,
+                        QKeySequence.SelectStartOfDocument, QKeySequence.SelectEndOfDocument,
+                        QKeySequence.DeleteStartOfWord, QKeySequence.DeleteEndOfWord
+                    ])
+                    if is_os_shortcut:
+                        return super().eventFilter(obj, event)
+
+                    key_name = QKeySequence(event.key()).toString().lower()
+                    keys.append(key_name)
+
+                key_combination = "-".join(keys)
+                undefined_message = f"<{key_combination}> is undefined."
+                self.window.echo_area_update(undefined_message)
+                return True
+        return super().eventFilter(obj, event)
 
 def main():
     """
