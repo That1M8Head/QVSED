@@ -4,7 +4,9 @@ These colour schemes can be applied to QVSED in its [config file](README.md#conf
 
 ## Colour Scheme List
 
-The following colour schemes are arranged in ascending order, from the first added to the last added.
+The following colour schemes are arranged in ascending order, from the earliest to the latest.
+
+If this file gets too big I'll reorganise them in alphabetical order or something.
 
 ### Monokai Classic
 
