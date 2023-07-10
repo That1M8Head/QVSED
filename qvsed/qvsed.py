@@ -58,7 +58,7 @@ class QVSEDWindow(QMainWindow):
         """
         super().__init__()
         self.load_ui_file()
-        self.hover_text_area()
+        self.focus_text_area()
         self.install_event_filter()
         self.set_text_area_encoding("UTF-8")
         self.set_up_text_area_handlers()
@@ -237,9 +237,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         echo_area.setCursorPosition(0)
         self.echo_area_timeout_clear(3000)
 
-    def hover_text_area(self):
+    def focus_text_area(self):
         """
-        Set the Text Area to have hover.
+        Set the Text Area to have focus.
         """
         text_area = self.textArea
         text_area.setFocus()
