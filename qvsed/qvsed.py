@@ -395,6 +395,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         scroll_value = scroll_bar.value()
         scroll_maximum = scroll_bar.maximum()
         scroll_step = scroll_bar.singleStep()
+        cursor = text_area.textCursor()
 
         half_page_steps = int(scroll_bar.pageStep() / 2)
 
@@ -403,7 +404,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         elif direction == QTextCursor.Down:
             scroll_bar.setValue(min(scroll_value + half_page_steps * scroll_step, scroll_maximum))
 
-        text_area.verticalScrollBar().valueChanged.emit(scroll_bar.value())
+        cursor.movePosition(direction, QTextCursor.MoveAnchor, half_page_steps)
+        text_area.setTextCursor(cursor)
 
     def quit_app(self):
         """

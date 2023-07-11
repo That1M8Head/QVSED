@@ -17,6 +17,7 @@ the same thing in that case.
 
 ```python
 # ASMED, inspired by the original ASMED, QVSED's predecessor
+# Original theme from ASMED, obviously
 text_color = "#FFFFFF"
 background_color = "#21222D"
 
@@ -38,6 +39,7 @@ scroll_bar_pressed_color = "#43475A"
 
 ```python
 # Banana, a light theme inspired by bananas
+# An original QVSED theme, requested by the author's brother
 text_color = "#331f00"
 background_color = "#fff3bf"
 
@@ -51,6 +53,7 @@ button_hover_color = "#f0ee82"
 
 ```python
 # Bubblegum, a light pink low-contrast colour scheme with dark text
+# An original QVSED theme
 text_color = "#4C4C4C"
 background_color = "#FCEFF1"
 
@@ -73,6 +76,7 @@ scroll_bar_pressed_color = "#FCEFF1"
 
 ```python
 # Buttercream, a light-yellow theme
+# An original QVSED theme
 text_color = "#000000"
 background_color = "#ffffda"
 
@@ -85,7 +89,8 @@ button_hover_color = "#fffad3"
 ![QVSED v1.3.9 in Codebreaker](colour-schemes/codebreaker.png)
 
 ```python
-# Codebreaker, That1M8Head named this one himself
+# Codebreaker, a hacker-y green on black scheme
+# Theme originates from 80s computers
 text_color = "#00FF00"
 background_color = "#000000"
 
@@ -99,6 +104,7 @@ button_hover_color = "#111111"
 
 ```python
 # Monokai, taken from sampling Doom Emacs' doom-monokai-classic theme
+# Original theme by Wimer Hazenberg
 text_color = "#F8F8F2"
 background_color = "#1D1F19"
 
@@ -112,6 +118,7 @@ button_hover_color = "#171819"
 
 ```python
 # Solarized Dark, you already know this one ;)
+# Original theme by Ethan Schoonover
 text_color = "#839496"
 background_color = "#002B36"
 
@@ -134,6 +141,7 @@ scroll_bar_pressed_color = "#073642"
 
 ```python
 # Solarized Light, you already know this one ;)
+# Original theme by Ethan Schoonover
 text_color = "#657B83"
 background_color = "#FDF6E3"
 
