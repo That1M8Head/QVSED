@@ -108,7 +108,7 @@ button_hover_color = "#171819"
 
 ### Solarized Dark
 
-![QVSED v1.4.2 in Solarized Dark](solarized-dark.png)
+![QVSED v1.4.2 in Solarized Dark](colour-schemes/solarized-dark.png)
 
 ```python
 # Solarized Dark, you already know this one ;)
@@ -130,7 +130,7 @@ scroll_bar_pressed_color = "#073642"
 
 ### Solarized Light
 
-![QVSED v1.4.2 in Solarized Light](solarized-light.png)
+![QVSED v1.4.2 in Solarized Light](colour-schemes/solarized-light.png)
 
 ```python
 # Solarized Light, you already know this one ;)
