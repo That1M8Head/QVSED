@@ -491,7 +491,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         font.setPointSize(self.font_size)
         if sys.platform == "Darwin":
             # macOS fonts should be bigger
-            font.setPointSize(self.font_size + 2)
+            font.setPointSize(self.font_size + 4)
         else:
             font.setPointSize(self.font_size)
         text_area.setTabStopWidth(4 * text_area.fontMetrics().width(' '))
