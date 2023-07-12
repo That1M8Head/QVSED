@@ -488,12 +488,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         text_area = self.textArea
         font = QFont()
         font.setFamilies(self.font_family)
-        font.setPointSize(self.font_size)
         if sys.platform == "Darwin":
             # macOS fonts should be bigger
-            font.setPointSize(self.font_size + 4)
-        else:
-            font.setPointSize(self.font_size)
+            self.font_size += 4
+        font.setPointSize(self.font_size)
         text_area.setTabStopWidth(4 * text_area.fontMetrics().width(' '))
         QApplication.instance().setFont(font)
         self.update_widget_fonts(self)
