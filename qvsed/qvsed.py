@@ -488,7 +488,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         text_area = self.textArea
         font = QFont()
         font.setFamilies(self.font_family)
-        if sys.platform == "Darwin":
+        if sys.platform == "darwin":
             # macOS fonts should be bigger
             self.font_size += 4
         font.setPointSize(self.font_size)
