@@ -98,6 +98,29 @@ button_color = "#000000"
 button_hover_color = "#111111"
 ```
 
+### Cute
+
+![QVSED v1.4.3 in Cute](colour-schemes/cute.png)
+
+```python
+# Cute, a light pink and white colour scheme
+# Theme originates from Cute Pink Light Theme for VS Code
+text_color = "#333333"
+background_color = "#FCEAF1"
+
+button_color = "#FCDEE9"
+button_hover_color = "#FDC8D8"
+button_pressed_color = "#F4B4CC"
+
+text_area_color = "#FFFFFF"
+echo_area_color = "#FFFFFF"
+
+scroll_bar_color = "#C1C1C1"
+scroll_bar_background_color = "#FFFFFF"
+scroll_bar_hover_color = "#929292"
+scroll_bar_pressed_color = "#666666"
+```
+
 ### Monokai
 
 ![QVSED v1.3.7 in Monokai](colour-schemes/monokai.png)
