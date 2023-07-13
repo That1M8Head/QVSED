@@ -16,7 +16,7 @@ import importlib.util
 import pkg_resources
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QFileDialog,
-    QAction, QShortcut
+    QAction, QShortcut, QDialog
 )
 from PyQt5.QtGui import (
     QKeySequence, QFont, QDragEnterEvent, QDropEvent,
@@ -347,14 +347,18 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
             self.echo_area_update("config.py appears to be broken, generating a new one.")
             self.generate_config()
 
-    def load_from_file(self, file_path = None):
+    def load_from_file(self, file_path=None):
         """
         Open a file dialog, and load the contents of a file into the Text Area.
         """
         text_area = self.textArea
 
         if not file_path:
-            file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
+            dialog_box = FileDialogBox("open", self)
+            if dialog_box.exec_():
+                file_path = dialog_box.get_selected_file_path()
+            else:
+                return
 
         if file_path:
             try:
@@ -364,6 +368,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
                 self.echo_area_update(f"Opened file {file_name}.")
             except Exception as error:
                 self.echo_area_update(f"Error opening file: {str(error)}")
+        else:
+            self.echo_area_update("Invalid or missing file path.")
 
     def load_ui_file(self):
         """
@@ -423,7 +429,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
             self.echo_area_update("Text Area is blank, will not save.")
             return
 
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save File")
+        dialog_box = FileDialogBox("save", self)
+        if dialog_box.exec_():
+            file_path = dialog_box.get_selected_file_path()
+        else:
+            return
 
         if file_path:
             try:
@@ -433,6 +443,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
                 self.echo_area_update(f"Saved file {file_name}.")
             except Exception as error:
                 self.echo_area_update(f"Error saving file: {str(error)}")
+
 
     def set_text_area_encoding(self, encoding):
         """
@@ -614,6 +625,90 @@ class KeyPressFilter(QObject):
                 self.window.echo_area_update(undefined_message)
                 return True
         return super().eventFilter(obj, event)
+
+class FileDialogBox(QDialog):
+    """
+    Class for QVSED file dialogs.
+    """
+    def __init__(self, operation, parent=None):
+        super(FileDialogBox, self).__init__(parent)
+        self.load_ui_file()
+
+        self.operation = operation
+        self.selected_file_path = ""
+
+        self.setWindowTitle(f"{self.operation.capitalize()} File")
+
+        self.set_shortcuts()
+        self.update_labels()
+
+    def set_shortcuts(self):
+        """
+        Self-explanatory.
+        """
+        self.confirmButton.clicked.connect(self.accept)
+        self.confirmButton.setShortcut(QKeySequence(Qt.Key_Return))
+
+        self.cancelButton.clicked.connect(self.reject)
+        self.cancelButton.setShortcut(QKeySequence(Qt.Key_Escape))
+        self.cancelButton.setShortcut(QKeySequence("Alt+Q"))
+
+        self.openSystemDialogButton.clicked.connect(self.open_system_dialog)
+        self.openSystemDialogButton.setShortcut(QKeySequence("Ctrl+D"))
+
+    def load_ui_file(self):
+        """
+        Load the UI file for the QVSED dialog box.
+        """
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        ui_file = os.path.join(current_dir, "qvsed_dialog.ui")
+        loadUi(ui_file, self)
+
+    def open_file_dialog(self):
+        """
+        Used for opening files.
+        """
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
+        if file_path:
+            return os.path.abspath(file_path)
+        return ""
+
+    def save_file_dialog(self):
+        """
+        Used for saving files.
+        """
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save File")
+        if file_path:
+            return os.path.abspath(file_path)
+        return ""
+
+    def open_system_dialog(self):
+        """
+        Used to open the system's file dialog.
+        """
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(self, "Open File" if self.operation == "open" else "Save File")
+        if file_path:
+            self.filePathBox.setText(file_path)
+            self.selected_file_path = file_path
+
+    def get_selected_file_path(self):
+        """
+        Return the file path specified in the file path box.
+        """
+        file_path = self.filePathBox.text()
+        if os.name == 'nt' and file_path.startswith('~'):
+            file_path = os.path.expanduser(file_path.replace('~', os.path.expanduser('~')))
+        if file_path:
+            return file_path
+        return None
+
+    def update_labels(self):
+        """
+        Update the labels depending on the operation
+        """
+        self.mainLabel.setText(f"Enter the file path to {self.operation} (relative or absolute)")
+        self.confirmButton.setText(self.operation.capitalize())
 
 def main():
     """

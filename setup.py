@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='qvsed',
-    version='1.4.6',
+    version='1.5.0',
     author='Arsalan Kazmi',
     description='Qt-Based Volatile Small Editor',
     long_description="""QVSED is a volatile and small text editor.
@@ -32,5 +32,5 @@ It stays out of your way on many occasions. Whether or not that's a good thing i
             'qvsed = qvsed.qvsed:main',
         ],
     },
-    package_data={'qvsed': ['qvsed.ui']},
+    package_data={'qvsed': ['qvsed.ui', 'qvsed_dialog.ui']},
 )
