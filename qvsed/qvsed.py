@@ -435,12 +435,19 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         else:
             return
 
+        if not os.path.exists(file_path):
+            saved = "Saved new"
+            with open(file_path, "w", encoding="UTF-8"):
+                pass
+        else:
+            saved = "Saved"
+
         if file_path:
             try:
                 with open(file_path, "w", encoding="UTF-8") as file:
                     file.write(text_area.toPlainText())
                 file_name = os.path.basename(file_path)
-                self.echo_area_update(f"Saved file {file_name}.")
+                self.echo_area_update(f"{saved} file {file_name}.")
             except Exception as error:
                 self.echo_area_update(f"Error saving file: {str(error)}")
 
