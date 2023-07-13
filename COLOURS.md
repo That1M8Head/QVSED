@@ -181,6 +181,29 @@ scroll_bar_hover_color = "#93A1A1"
 scroll_bar_pressed_color = "#657B83"
 ```
 
+### Windows 9x
+
+![QVSED v1.5.4 in Windows 9x](colour-schemes/windows9x.png)
+
+```python
+# Windows 9x, reminiscent of old Windows systems
+# Theme originates from Windows 95/98
+text_color = "#000000"
+background_color = "#C0C0C0"
+
+button_color = "#CFCFCF"
+button_hover_color = "#808080"
+button_pressed_color = "#000080"
+
+text_area_color = "#FFFFFF"
+echo_area_color = "#FFFFFF"
+
+scroll_bar_color = "#C0C0C0"
+scroll_bar_background_color = "#D8D8D8"
+scroll_bar_hover_color = "#C0C0C0"
+scroll_bar_pressed_color = "#808080"
+```
+
 ## Equivalents
 
 If the following definitions aren't found in config.py, they'll be replaced
