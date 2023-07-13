@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>556</width>
-    <height>181</height>
+    <height>216</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,6 +40,21 @@
        </property>
        <property name="text">
         <string>Enter the file path to use (relative or absolute)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="cwdLabel">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Current working directory is &lt;cwd&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

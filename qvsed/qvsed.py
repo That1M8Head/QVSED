@@ -650,6 +650,10 @@ class FileDialogBox(QDialog):
         super(FileDialogBox, self).__init__(parent)
         self.load_ui_file()
 
+        home_dir = os.path.expanduser("~")
+        cwd = os.getcwd().replace(home_dir, "~").replace("\\", "/")
+        self.cwdLabel.setText(f"Current working directory is {cwd}")
+
         self.operation = operation
         self.selected_file_path = ""
 
@@ -685,7 +689,7 @@ class FileDialogBox(QDialog):
         Used to open the system's file dialog.
         """
         file_dialog = QFileDialog()
-        
+
         if self.operation == "save":
             file_path, _ = file_dialog.getOpenFileName(self, "Save File")
         elif self.operation == "open":
