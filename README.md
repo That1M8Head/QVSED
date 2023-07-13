@@ -38,6 +38,8 @@ QVSED is broken up into three parts - the Action Deck, the Text Area and the Ech
 
 The Action Deck contains editing commands, the Text Area is where the text content goes, and the Echo Area is where messages will be printed.
 
+There's also the File Picker, for whenever QVSED prompts you to open or save a file. It provides a simple text entry and a button to open your system's file picker.
+
 ## Keyboard Shortcuts
 
 QVSED contains a mix of bindings from the original ASMED, Vim-style bindings and Emacs-style bindings.
@@ -67,7 +69,7 @@ These bindings are evolutions of the original ASMED key bindings.
 ### File Picker bindings
 
 + **Open/Save** - `<RET>` - Load from/save to the specified file path.
-+ **Cancel** - `<ESC>` - Cancel and go back to QVSED.
++ **Cancel** - `<ESC>` or `<A-q>` - Cancel and go back to QVSED.
 + **System File Picker**  - `<C-d>` - Launch your OS file picker.
 
 ### Motion bindings
@@ -109,6 +111,24 @@ The Echo Area is the small bar at the bottom of the QVSED window that prints inf
 For example, when a file is opened, it prints its file name. If a config file was not found, it'll generate one and give you the path.
 
 QVSED inherited the name from Emacs. Well, less "inherited" and more "stolen from."
+
+## File Picker
+
+The File Picker is displayed when you use the **Open File** or **Save File** Action Deck commands.
+
+It consists of the following elements:
+
++ A label instructing you to enter the file path, relative or absolute.
++ Another label that shows the current working directory.
++ A text box where you can enter the file path.
++ Three buttons:
+  + **System File Picker** opens your operating system's file picker, so you can select the file you want without having to type in its path, just like in pre-1.5.0 QVSED versions. This can also be accessed with the `<C-d>` key binding.
+  + **Open** or **Save** (depending on the Action Deck command you used) opens or saves the file at the specified path.
+  + **Cancel** closes the dialog without saving any changes.
+
+The File Picker makes it simple to load the file you want, simply by typing in its path.
+
+If this is too oversimplified for you, or you just need to use your system file picker for whatever reason, you can always use the System File Picker option.
 
 ## Configuration
 
