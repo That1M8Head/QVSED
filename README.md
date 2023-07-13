@@ -132,36 +132,6 @@ If this is too oversimplified for you, or you just need to use your system file 
 
 ## Configuration
 
-When QVSED is started, it looks for a configuration file. If it can't find one, it creates one and populates it with defaults.
+For configuration documentation, see [CONFIG.md](CONFIG.md).
 
-On Windows, the configuration file will be stored at `C:\Users\<username>\AppData\Roaming\QVSED\config.py`, where `<username>` is your Windows username.
-
-On *nix systems, the configuration file will be stored at `~/.config/QVSED/config.py`, where `~` is your home directory (`/home/<username>`).
-
-As of QVSED 1.3.0, you can customise the colour scheme in addition to the font. For a list of sample colour schemes, [go here](COLOURS.md).
-
-```python
-# The default QVSED config.
-
-# Font
-font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
-font_size = 11
-
-# Colours
-text_color = "#FFFFFF"
-background_color = "#282C34"
-
-button_color = "#393F4A"
-button_hover_color = "#31353F"
-button_pressed_color = "#282C34"
-
-text_area_color = "#31353F"
-echo_area_color = "#393F4A"
-
-scroll_bar_color = "#363D49"
-scroll_bar_background_color = "#282F3B"
-scroll_bar_hover_color = "#4F5664"
-scroll_bar_pressed_color = "#262B34"
-```
-
-Keep in mind that `font_family` *must* be a list. If you want only one font, specify `font_family = ["My Font"]`.
+For colour scheme configuration, see [COLOURS.md](COLOURS.md) for a list of sample colour schemes.
