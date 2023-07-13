@@ -4,11 +4,15 @@ QVSED is a volatile text editor.
 
 ![QVSED screenshot, showing the help message](qvsed-screenshot.png)
 
-"Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded. Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata. You may be prompted if you're about to overwrite a file, but that's up to your OS, not QVSED.
+"Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded.
+Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata.
 
-QVSED follows the philosophy of ultra-minimalism, with its heavy emphasis on just editing text and nothing more. QVSED's editing style is text-based, not file-based like basically every other editor out there. Text goes in, from a file, and then text later comes out, into another or perhaps the same file.
+QVSED follows the philosophy of ultra-minimalism, with its heavy emphasis on just editing text and nothing more.
+QVSED's editing style is text-based, not file-based like basically every other editor out there.
+Text goes in, from a file, and then text later comes out, into another or perhaps the same file.
 
-QVSED can be used as a simple scratchpad or throwaway editor, as well as a general editing software application, since it won't prompt you if you do anything destructive, It stays out of your way on many occasions. Whether or not that's a good thing is up to you.
+QVSED works well as a simple scratchpad, but it's also quite useful for more involved editing operations, providing a seamless experience without posing prompts for potentially destructive actions.
+It's not as powerful as something like Vim or even ed, but it provides a unique editing experience you won't find anywhere else. Whether or not this is a good thing is up to you.
 
 QVSED is a PyQt5 rewrite of my older project, [ASMED (Another SMol EDitor)](https://github.com/That1M8Head/ASMED), which was written using Windows Forms, and was quite obviously only for Windows.
 
@@ -22,7 +26,7 @@ QVSED [is available on PyPI](https://pypi.org/project/QVSED/). You can install i
 pip install --upgrade qvsed
 ```
 
-To run QVSED, use the `qvsed` command. If you find it convenient to have a clickable icon to launch QVSED with, scroll down to find out how to make a shortcut/alias/symlink/whatever.
+To run QVSED, use the `qvsed` command. Feel free to make a shortcut/alias/symlink to it if you find that convenient.
 
 ## License
 
@@ -32,7 +36,7 @@ QVSED is free software, licensed under the GNU General Public License version 3 
 
 QVSED is broken up into three parts - the Action Deck, the Text Area and the Echo Area.
 
-The Action Deck contains editing commands, the Text Area is a text area, and the Echo Area is where messages will be printed.
+The Action Deck contains editing commands, the Text Area is where the text content goes, and the Echo Area is where messages will be printed.
 
 ## Keyboard Shortcuts
 
@@ -59,6 +63,12 @@ These bindings are evolutions of the original ASMED key bindings.
 + **Full Screen** - `<A-f>` - Toggle full screen mode.
 + **Get Help** - `<C-h>` - Show a help message in the Text Area. This will overwrite your current work.
 + **Quit QVSED**  - `<A-q>` - Quit QVSED on the spot with no confirmation dialog.
+
+### File Picker bindings
+
++ **Open/Save** - `<RET>` - Load from/save to the specified file path.
++ **Cancel** - `<ESC>` - Cancel and go back to QVSED.
++ **System File Picker**  - `<C-d>` - Launch your OS file picker.
 
 ### Motion bindings
 
@@ -135,15 +145,3 @@ scroll_bar_pressed_color = "#262B34"
 ```
 
 Keep in mind that `font_family` *must* be a list. If you want only one font, specify `font_family = ["My Font"]`.
-
-## Making Shortcuts
-
-### Windows
-
-1. Locate the QVSED executable file, usually located at `C:\Users\<username>\AppData\Local\Programs\Python\Python3xx\Scripts\qvsed.exe`. Substitute `<username>` with your Windows username and `xx` with whatever Python version you use, for example `Python311`.
-2. Right-click on the executable file and select "Create Shortcut."
-3. Move the shortcut to your desired location, such as the desktop or the Start Menu folder.
-4. Double-click on the shortcut to launch QVSED directly.
-5. If you want, supply your own icon, because QVSED doesn't have its own icon yet.
-
-There aren't instructions for macOS or Linux because I didn't have access to either system at the time to check, but I'll update it in the future sometime maybe.
