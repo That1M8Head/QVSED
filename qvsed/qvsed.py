@@ -79,7 +79,7 @@ class QVSEDWindow(QMainWindow):
         """
 
         stylesheet = f"""
-QMainWindow {{
+QMainWindow, QDialog {{
     color: {text_color};
     background: {background_color};
 }}
