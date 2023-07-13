@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='qvsed',
-    version='1.5.3',
+    version='1.5.4',
     author='Arsalan Kazmi',
     description='Qt-Based Volatile Small Editor',
     long_description="""QVSED is a volatile and small text editor.
