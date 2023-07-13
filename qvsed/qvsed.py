@@ -64,8 +64,8 @@ class QVSEDWindow(QMainWindow):
         self.set_text_area_encoding("UTF-8")
         self.set_up_text_area_handlers()
         self.set_up_action_deck()
-        self.echo_area_update(f"Welcome to QVSED v{self.get_qvsed_version()}!")
         self.load_config()
+        self.echo_area_update(f"Welcome to QVSED v{self.get_qvsed_version()}!")
         self.set_up_fonts()
         if self.check_if_file_parameter():
             self.load_from_file(sys.argv[1])
@@ -248,7 +248,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         echo_area = self.echoArea
         echo_area.setText(message)
         echo_area.setCursorPosition(0)
-        self.echo_area_timeout_clear(3000)
+        if self.echo_area_timeout > 0:
+            self.echo_area_timeout_clear(self.echo_area_timeout)
 
     def focus_text_area(self):
         """
@@ -325,6 +326,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
         self.font_family = qvsed_config.font_family
         self.font_size = qvsed_config.font_size
+
+        self.echo_area_timeout = getattr(qvsed_config, 'echo_area_timeout', 3000)
 
         # Load the colour scheme settings from the config file
         # We use the shorter American spellings because it's standard, I guess

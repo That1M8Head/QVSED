@@ -1,9 +1,12 @@
-# This config file serves as a template and should not be modified directly; please make any necessary changes in config.py.
+# This is QVSED's config file template and should not be modified directly; please make any necessary changes in config.py.
 # pylint: disable=all
 
 # Font
 font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospace"]
 font_size = 11
+
+# Options
+echo_area_timeout = 3000
 
 # Colours
 text_color = "#FFFFFF"
