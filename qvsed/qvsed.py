@@ -676,10 +676,16 @@ class FileDialogBox(QDialog):
         Used to open the system's file dialog.
         """
         file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(self, "Open File" if self.operation == "open" else "Save File")
+        
+        if self.operation == "save":
+            file_path, _ = file_dialog.getOpenFileName(self, "Save File")
+        elif self.operation == "open":
+            file_path, _ = file_dialog.getOpenFileName(self, "Open File")
+
         if file_path:
             self.filePathBox.setText(file_path)
             self.selected_file_path = file_path
+            self.accept()
 
     def get_selected_file_path(self):
         """
