@@ -57,9 +57,11 @@ QVSED contains a mix of bindings from the original ASMED, Vim-style bindings and
 
 When you see `<C-n>`, for instance, that means pressing `Ctrl+N` on Windows/Linux, or `⌘N` on macOS.
 
-`Ctrl` being `⌘` and `Alt` being `⌥` is a Qt thing, not a QVSED thing, and there isn't much of a reason to change it.
+This kind of notation was inspired by Emacs (though, QVSED uses `A-` instead of `M-` to explicitly mean "Alt").
 
-This kind of notation was inspired by Emacs (though, QVSED uses `A-` instead of `M-` to be clearer).
+`Ctrl` being `⌘` is a Qt thing, not a QVSED thing, and there isn't much of a reason to change it.
+
+`Alt` being `⌥` is a Mac thing anyway, and there's not much difference in that case, even Emacs uses `⌥`.
 
 ### Action Deck bindings
 
