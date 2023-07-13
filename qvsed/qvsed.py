@@ -671,24 +671,6 @@ class FileDialogBox(QDialog):
         ui_file = os.path.join(current_dir, "qvsed_dialog.ui")
         loadUi(ui_file, self)
 
-    def open_file_dialog(self):
-        """
-        Used for opening files.
-        """
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open File")
-        if file_path:
-            return os.path.abspath(file_path)
-        return ""
-
-    def save_file_dialog(self):
-        """
-        Used for saving files.
-        """
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save File")
-        if file_path:
-            return os.path.abspath(file_path)
-        return ""
-
     def open_system_dialog(self):
         """
         Used to open the system's file dialog.
