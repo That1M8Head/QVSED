@@ -9,11 +9,15 @@ font_size = 11
 text_color = "#FFFFFF"
 background_color = "#282C34"
 
+button_text_color = "#FFFFFF"
 button_color = "#393F4A"
 button_hover_color = "#31353F"
 button_pressed_color = "#282C34"
 
+text_area_text_color = "#FFFFFF"
 text_area_color = "#31353F"
+
+echo_area_text_color = "#FFFFFF"
 echo_area_color = "#393F4A"
 
 scroll_bar_color = "#363D49"

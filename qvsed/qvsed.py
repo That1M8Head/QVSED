@@ -70,10 +70,11 @@ class QVSEDWindow(QMainWindow):
         if self.check_if_file_parameter():
             self.load_from_file(sys.argv[1])
 
-    def apply_style_sheet(self, text_color, background_color, button_color,
-                          button_hover_color, button_pressed_color, text_area_color,
-                          echo_area_color, scroll_bar_color, scroll_bar_background_color,
-                          scroll_bar_hover_color, scroll_bar_pressed_color):
+    def apply_style_sheet(self, text_color, background_color, button_color, button_text_color,
+                            button_hover_color, button_pressed_color, text_area_color,
+                            text_area_text_color, echo_area_color, echo_area_text_color,
+                            scroll_bar_color, scroll_bar_background_color, scroll_bar_hover_color,
+                            scroll_bar_pressed_color):
         """
         Generate and apply a style sheet based on the config.py file.
         """
@@ -94,17 +95,17 @@ QPlainTextEdit, QLineEdit {{
 }}
 
 QPlainTextEdit {{
-    color: {text_color};
+    color: {text_area_text_color};
     background: {text_area_color};
 }}
 
 QLineEdit {{
-    color: {text_color};
+    color: {echo_area_text_color};
     background: {echo_area_color};
 }}
 
 QPushButton {{
-    color: {text_color};
+    color: {button_text_color};
     border: 2px solid {button_hover_color};
     background: {button_color};
     padding: 2px;
@@ -331,21 +332,25 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         background_color = getattr(qvsed_config, 'background_color', None)
 
         button_color = getattr(qvsed_config, 'button_color', None)
+        button_text_color = getattr(qvsed_config, 'button_text_color', text_color)
         button_hover_color = getattr(qvsed_config, 'button_hover_color', getattr(qvsed_config, 'button_focus_color', None))
         button_pressed_color = getattr(qvsed_config, 'button_pressed_color', background_color)
 
         text_area_color = getattr(qvsed_config, 'text_area_color', button_hover_color)
+        text_area_text_color = getattr(qvsed_config, 'text_area_text_color', text_color)
         echo_area_color = getattr(qvsed_config, 'echo_area_color', button_hover_color)
+        echo_area_text_color = getattr(qvsed_config, 'echo_area_text_color', text_color)
 
         scroll_bar_color = getattr(qvsed_config, 'scroll_bar_color', button_color)
         scroll_bar_background_color = getattr(qvsed_config, 'scroll_bar_background_color', button_hover_color)
         scroll_bar_hover_color = getattr(qvsed_config, 'scroll_bar_hover_color', button_pressed_color)
         scroll_bar_pressed_color = getattr(qvsed_config, 'scroll_bar_pressed_color', button_pressed_color)
 
-        self.apply_style_sheet(text_color, background_color, button_color,
+        self.apply_style_sheet(text_color, background_color, button_color, button_text_color,
                                button_hover_color, button_pressed_color, text_area_color,
-                               echo_area_color, scroll_bar_color, scroll_bar_background_color,
-                               scroll_bar_hover_color, scroll_bar_pressed_color)
+                               text_area_text_color, echo_area_color, echo_area_text_color,
+                               scroll_bar_color, scroll_bar_background_color, scroll_bar_hover_color,
+                               scroll_bar_pressed_color)
 
         if None in (text_color, background_color, button_color, button_hover_color):
             self.echo_area_update("config.py appears to be broken, generating a new one.")
