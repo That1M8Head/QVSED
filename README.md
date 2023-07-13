@@ -32,6 +32,12 @@ To run QVSED, use the `qvsed` command. Feel free to make a shortcut/alias/symlin
 
 QVSED is free software, licensed under the GNU General Public License version 3 or later.
 
+## Configuration
+
+For configuration documentation, see [CONFIG.md](CONFIG.md).
+
+For colour scheme configuration, see [COLOURS.md](COLOURS.md) for a list of sample colour schemes.
+
 ## Usage
 
 QVSED is broken up into three parts - the Action Deck, the Text Area and the Echo Area.
@@ -129,9 +135,3 @@ It consists of the following elements:
 The File Picker makes it simple to load the file you want, simply by typing in its path.
 
 If this is too oversimplified for you, or you just need to use your system file picker for whatever reason, you can always use the System File Picker option.
-
-## Configuration
-
-For configuration documentation, see [CONFIG.md](CONFIG.md).
-
-For colour scheme configuration, see [COLOURS.md](COLOURS.md) for a list of sample colour schemes.
