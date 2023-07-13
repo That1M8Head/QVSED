@@ -84,6 +84,10 @@ QMainWindow, QDialog {{
     background: {background_color};
 }}
 
+QLabel {{
+    color: {text_color};
+}}
+
 QPlainTextEdit, QLineEdit {{
     padding: 8px;
     border: none;
