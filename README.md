@@ -2,7 +2,7 @@
 
 QVSED is a volatile text editor.
 
-![QVSED screenshot, showing the help message](qvsed-screenshot.png)
+![QVSED screenshot, showing the help message](screenshots/qvsed-screenshot.png)
 
 "Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded.
 Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata.
@@ -100,11 +100,15 @@ These bindings are for the most part inspired by Vim, if not Emacs.
 
 ## Action Deck
 
+![Action Deck](screenshots/action-deck-screenshot.png)
+
 The Action Deck, positioned on the left side of the QVSED window, containing commands to clear the Text Area, open or save a file, display this help text, toggle in and out of full screen mode or quit QVSED.
 
 The Action Deck is on the left rather than on the top like a traditional menu bar, so that the buttons can be bigger while still providing enough screen real estate for the Text Area.
 
 ## Text Area
+
+![Text Area](screenshots/text-area-screenshot.png)
 
 The Text Area is where the actual text editing takes place.
 
@@ -113,6 +117,8 @@ You can enter and delete text, scroll down and up, cut, copy, paste, all that st
 QVSED is intentionally simplistic, and so there's not much to the Text Area.
 
 ## Echo Area
+
+![Echo Area](screenshots/echo-area-screenshot.png)
 
 The Echo Area is the small bar at the bottom of the QVSED window that prints information.
 
