@@ -342,7 +342,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
         text_area_color = getattr(qvsed_config, 'text_area_color', button_hover_color)
         text_area_text_color = getattr(qvsed_config, 'text_area_text_color', text_color)
-        echo_area_color = getattr(qvsed_config, 'echo_area_color', button_hover_color)
+        echo_area_color = getattr(qvsed_config, 'echo_area_color', text_area_color)
         echo_area_text_color = getattr(qvsed_config, 'echo_area_text_color', text_color)
 
         scroll_bar_color = getattr(qvsed_config, 'scroll_bar_color', button_color)
