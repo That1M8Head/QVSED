@@ -123,13 +123,33 @@ QPushButton {{
 }}
 
 QPushButton:hover {{
-    color: {text_color};
+    color: {button_text_color};
     background: {button_hover_color};
 }}
 
 QPushButton:pressed {{
-    color: {text_color};
+    color: {button_text_color};
     background: {button_pressed_color};
+}}
+
+QMenu {{
+    color: {button_text_color};
+    background: {button_color};
+    padding: 6px;
+}}
+
+QMenu::item {{
+    padding: 6px 10px;
+}}
+
+QMenu::item:selected {{
+    color: {button_text_color};
+    background: {button_hover_color};
+}}
+
+QMenu::item:disabled {{
+    color: gray;
+    background: {button_color};
 }}
 
 QScrollBar:vertical {{
