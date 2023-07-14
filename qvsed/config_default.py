@@ -10,21 +10,29 @@ tab_stop_width = 4
 echo_area_timeout = 3000
 
 # Colours
-text_color = "#FFFFFF"
-background_color = "#282C34"
-
-button_text_color = "#FFFFFF"
-button_color = "#393F4A"
-button_hover_color = "#31353F"
-button_pressed_color = "#282C34"
-
-text_area_text_color = "#FFFFFF"
-text_area_color = "#31353F"
-
-echo_area_text_color = "#FFFFFF"
-echo_area_color = "#393F4A"
-
-scroll_bar_color = "#363D49"
-scroll_bar_background_color = "#282F3B"
-scroll_bar_hover_color = "#4F5664"
-scroll_bar_pressed_color = "#262B34"
+colors = {
+    "window": {
+        "text": "#FFFFFF",
+        "background": "#282C34"
+    },
+    "button": {
+        "text": "#FFFFFF",
+        "background": "#393F4A",
+        "hover": "#31353F",
+        "pressed": "#282C34"
+    },
+    "text_area": {
+        "text": "#FFFFFF",
+        "background": "#31353F"
+    },
+    "echo_area": {
+        "text": "#FFFFFF",
+        "background": "#393F4A"
+    },
+    "scroll_bar": {
+        "text": "#363D49",
+        "background": "#282F3B",
+        "hover": "#4F5664",
+        "pressed": "#262B34"
+    }
+}

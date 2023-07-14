@@ -253,9 +253,6 @@
           <pointsize>11</pointsize>
          </font>
         </property>
-        <property name="text">
-         <string>Welcome to QVSED!</string>
-        </property>
         <property name="cursorPosition">
          <number>0</number>
         </property>
