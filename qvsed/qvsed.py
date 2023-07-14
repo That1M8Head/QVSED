@@ -653,10 +653,6 @@ class FileDialogBox(QDialog):
         super(FileDialogBox, self).__init__(parent)
         self.load_ui_file()
 
-        home_dir = os.path.expanduser("~")
-        cwd = os.getcwd().replace(home_dir, "~").replace("\\", "/")
-        self.cwdLabel.setText(f"Current working directory is {cwd}")
-
         self.operation = operation
         self.selected_file_path = ""
 
@@ -679,6 +675,9 @@ class FileDialogBox(QDialog):
         self.openSystemDialogButton.clicked.connect(self.open_system_dialog)
         self.openSystemDialogButton.setShortcut(QKeySequence("Ctrl+D"))
 
+        self.chdirButton.clicked.connect(self.set_current_working_directory)
+        self.chdirButton.setShortcut(QKeySequence("Alt+D"))
+
     def load_ui_file(self):
         """
         Load the UI file for the QVSED dialog box.
@@ -694,32 +693,69 @@ class FileDialogBox(QDialog):
         file_dialog = QFileDialog()
 
         if self.operation == "save":
-            file_path, _ = file_dialog.getOpenFileName(self, "Save File")
+            file_path, _ = file_dialog.getSaveFileName(self, "Save File", self.get_selected_directory())
         elif self.operation == "open":
-            file_path, _ = file_dialog.getOpenFileName(self, "Open File")
+            file_path, _ = file_dialog.getOpenFileName(self, "Open File", self.get_selected_directory())
 
         if file_path:
             self.filePathBox.setText(file_path)
             self.selected_file_path = file_path
             self.accept()
 
+    def check_path(self, initial_value, isdir=False):
+        """
+        Return a file or directory path with additional checks.
+        """
+        path = initial_value
+
+        if isdir:
+            if path and not path.endswith(("/", "\\")):
+                path += os.sep
+            path = os.path.dirname(path)
+
+        if path.startswith('~'):
+            path = os.path.expanduser(path.replace('~', os.path.expanduser('~')))
+        return path
+
     def get_selected_file_path(self):
         """
         Return the file path specified in the file path box.
         """
-        file_path = self.filePathBox.text()
-        if os.name == 'nt' and file_path.startswith('~'):
-            file_path = os.path.expanduser(file_path.replace('~', os.path.expanduser('~')))
+        file_path = self.check_path(self.filePathBox.text())
+
         if file_path:
             return file_path
         return None
 
+    def get_selected_directory(self):
+        """
+        Return the directory path specified in the file path box.
+        """
+        directory_path = self.check_path(self.filePathBox.text(), True)
+
+        if directory_path and os.path.isdir(directory_path):
+            return directory_path
+        return None
+
+    def set_current_working_directory(self):
+        """
+        Set the current working directory.
+        """
+        chosen_directory = self.get_selected_directory()
+        if chosen_directory is not None:
+            os.chdir(chosen_directory)
+            self.update_labels()
+            self.filePathBox.clear()
+
     def update_labels(self):
         """
-        Update the labels depending on the operation
+        Update the labels depending on the operation.
         """
         self.mainLabel.setText(f"Enter the file path to {self.operation} (relative or absolute)")
         self.confirmButton.setText(self.operation.capitalize())
+        home_dir = os.path.expanduser("~")
+        cwd = os.getcwd().replace(home_dir, "~").replace("\\", "/")
+        self.cwdLabel.setText(f"Current working directory is {cwd}")
 
 def main():
     """
@@ -727,7 +763,6 @@ def main():
     """
     app = QVSEDApp()
     app.run()
-
 
 if __name__ == "__main__":
     main()
