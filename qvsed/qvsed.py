@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import (
     QKeySequence, QFont, QDragEnterEvent, QDropEvent,
-    QTextCursor
+    QTextCursor, QFontMetricsF
 )
 from PyQt5.QtCore import (
     Qt, QTextCodec, QEvent, QObject, QTimer
@@ -326,6 +326,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
 
         self.font_family = qvsed_config.font_family
         self.font_size = qvsed_config.font_size
+        self.tab_stop_width = getattr(qvsed_config, 'tab_stop_width', 4)
 
         self.echo_area_timeout = getattr(qvsed_config, 'echo_area_timeout', 3000)
 
@@ -515,16 +516,24 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         """
         Set up the fonts for the QVSED window.
         """
-        text_area = self.textArea
         font = QFont()
         font.setFamilies(self.font_family)
         if sys.platform == "darwin":
             # macOS fonts should be bigger
             self.font_size += 4
         font.setPointSize(self.font_size)
-        text_area.setTabStopWidth(4 * text_area.fontMetrics().width(' '))
         QApplication.instance().setFont(font)
+        self.set_tab_stop_width()
         self.update_widget_fonts(self)
+
+    def set_tab_stop_width(self):
+        """
+        Set the tab stop width for the Text Area.
+        """
+        font = self.textArea.font()
+        font_metrics = QFontMetricsF(font)
+        space_width = font_metrics.horizontalAdvance(' ')
+        self.textArea.setTabStopDistance(space_width * 4)
 
     def set_up_shortcuts(self):
         """

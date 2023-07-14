@@ -6,6 +6,7 @@ font_family = ["JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", "monospac
 font_size = 11
 
 # Options
+tab_stop_width = 4
 echo_area_timeout = 3000
 
 # Colours

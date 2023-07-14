@@ -25,6 +25,7 @@ Config options that change QVSED's functionality.
 
 Option              | Description                                              | Type  | Default
 --------------------|----------------------------------------------------------|-------|---------
+`tab_stop_width`    | Specifies the Text Area's tab stop width.                | `int` | 4
 `echo_area_timeout` | Specifies the Echo Area's clear timeout in milliseconds. | `int` | 3000
 
 ## Colours
