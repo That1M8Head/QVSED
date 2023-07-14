@@ -79,6 +79,7 @@ These bindings are evolutions of the original ASMED key bindings.
 + **Open/Save** - `<RET>` - Load from/save to the specified file path.
 + **Cancel** - `<ESC>` or `<A-q>` - Cancel and go back to QVSED.
 + **System File Picker**  - `<C-d>` - Launch your OS file picker.
++ **Change Directory**  - `<A-d>` - Change the current working directory.
 
 ### Motion bindings
 
@@ -128,6 +129,8 @@ QVSED inherited the name from Emacs. Well, less "inherited" and more "stolen fro
 
 ## File Picker
 
+![File Picker](screenshots/file-picker-screenshot.png)
+
 The File Picker is displayed when you use the **Open File** or **Save File** Action Deck commands.
 
 It consists of the following elements:
@@ -137,6 +140,7 @@ It consists of the following elements:
 + A text box where you can enter the file path.
 + Three buttons:
   + **System File Picker** opens your operating system's file picker, so you can select the file you want without having to type in its path, just like in pre-1.5.0 QVSED versions. This can also be accessed with the `<C-d>` key binding.
+  + **Change Directory** changes the current working directory to the one specified in the path box. This can also be accessed with the `<A-d>` key binding.
   + **Open** or **Save** (depending on the Action Deck command you used) opens or saves the file at the specified path.
   + **Cancel** closes the dialog without saving any changes.
 
