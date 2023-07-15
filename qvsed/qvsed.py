@@ -183,6 +183,37 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         # Apply the stylesheet to the app
         self.setStyleSheet(stylesheet)
 
+    def apply_vanilla_style_sheet(self):
+        """
+        Generate and apply a vanilla style sheet based on the config.py file.
+        """
+
+        stylesheet = """
+QPlainTextEdit, QLineEdit {
+    padding: 8px;
+}
+
+QScrollBar:vertical {
+    width: 16px;
+    margin: 16px 0 16px 0;
+}
+
+QScrollBar::handle:vertical {
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+        """
+
+        # Apply the stylesheet to the app
+        self.setStyleSheet(stylesheet)
+
     def check_if_file_parameter(self):
         """
         Check if a file path was specified at the parameter.
@@ -437,11 +468,13 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
         self.tab_stop_width = getattr(qvsed_config, 'tab_stop_width', 4)
         self.echo_area_timeout = getattr(qvsed_config, 'echo_area_timeout', 3000)
 
+        if getattr(qvsed_config, 'vanilla_theme', False):
+            self.apply_vanilla_style_sheet()
+            return
+
         # Load the colour scheme settings from the config file
         colours = self.extract_color_values(qvsed_config)
-
         self.apply_style_sheet(colours)
-
         if None in (colours['text_color'], colours['background_color'], colours['button_color'], colours['button_hover_color']):
             self.echo_area_update("config.py appears to be broken, generating a new one.")
             self.generate_config()

@@ -10,6 +10,7 @@ tab_stop_width = 4
 echo_area_timeout = 3000
 
 # Colours
+vanilla_theme = False
 colors = {
     "window": {
         "text": "#FFFFFF",
