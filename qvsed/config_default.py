@@ -12,28 +12,19 @@ echo_area_timeout = 3000
 # Colours
 vanilla_theme = False
 colors = {
-    "window": {
-        "text": "#FFFFFF",
-        "background": "#282C34"
-    },
+    "window": {"text": "#FFFFFF", "background": "#282C34"},
     "button": {
         "text": "#FFFFFF",
         "background": "#393F4A",
         "hover": "#31353F",
-        "pressed": "#282C34"
+        "pressed": "#282C34",
     },
-    "text_area": {
-        "text": "#FFFFFF",
-        "background": "#31353F"
-    },
-    "echo_area": {
-        "text": "#FFFFFF",
-        "background": "#393F4A"
-    },
+    "text_area": {"text": "#FFFFFF", "background": "#31353F"},
+    "echo_area": {"text": "#FFFFFF", "background": "#393F4A"},
     "scroll_bar": {
         "text": "#363D49",
         "background": "#282F3B",
         "hover": "#4F5664",
-        "pressed": "#262B34"
-    }
+        "pressed": "#262B34",
+    },
 }
