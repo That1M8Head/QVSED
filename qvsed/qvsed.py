@@ -1,6 +1,6 @@
 """
-QVSED - Qt-Based Volatile Small Editor
-A cross-platform simple and volatile text editor by Arsalan Kazmi
+QVSED - Qt-Based Versatile Stateless Editor
+A cross-platform simple and stateless text editor by Arsalan "Velocity" Kazmi
 See README.md or "Get Help" inside QVSED for more info
 """
 
@@ -15,17 +15,24 @@ import shutil
 import importlib.util
 import pkg_resources
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QFileDialog,
-    QAction, QShortcut, QDialog
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QFileDialog,
+    QAction,
+    QShortcut,
+    QDialog,
 )
 from PyQt5.QtGui import (
-    QKeySequence, QFont, QDragEnterEvent, QDropEvent,
-    QTextCursor, QFontMetricsF
+    QKeySequence,
+    QFont,
+    QDragEnterEvent,
+    QDropEvent,
+    QTextCursor,
+    QFontMetricsF,
 )
-from PyQt5.QtCore import (
-    Qt, QTextCodec, QEvent, QObject, QTimer
-)
-from PyQt5.uic import loadUi
+from PyQt5.QtCore import Qt, QTextCodec, QEvent, QObject, QTimer
+from qvsed_ui import QVSEDMainWindow, QVSEDMainDialog
 
 
 class QVSEDApp:
@@ -48,7 +55,7 @@ class QVSEDApp:
         self.app.exec()
 
 
-class QVSEDWindow(QMainWindow):
+class QVSEDWindow(QMainWindow, QVSEDMainWindow):
     """
     The main window class for QVSED.
     """
@@ -58,7 +65,7 @@ class QVSEDWindow(QMainWindow):
         Initialize the QVSED window.
         """
         super().__init__()
-        self.load_ui_file()
+        self.load_ui()
         self.focus_text_area()
         self.install_event_filter()
         self.set_text_area_encoding("UTF-8")
@@ -75,20 +82,20 @@ class QVSEDWindow(QMainWindow):
         """
         Generate and apply a style sheet based on the config.py file.
         """
-        text_color = colours['text_color']
-        background_color = colours['background_color']
-        button_color = colours['button_color']
-        button_text_color = colours['button_text_color']
-        button_hover_color = colours['button_hover_color']
-        button_pressed_color = colours['button_pressed_color']
-        text_area_color = colours['text_area_color']
-        text_area_text_color = colours['text_area_text_color']
-        echo_area_color = colours['echo_area_color']
-        echo_area_text_color = colours['echo_area_text_color']
-        scroll_bar_color = colours['scroll_bar_color']
-        scroll_bar_background_color = colours['scroll_bar_background_color']
-        scroll_bar_hover_color = colours['scroll_bar_hover_color']
-        scroll_bar_pressed_color = colours['scroll_bar_pressed_color']
+        text_color = colours["text_color"]
+        background_color = colours["background_color"]
+        button_color = colours["button_color"]
+        button_text_color = colours["button_text_color"]
+        button_hover_color = colours["button_hover_color"]
+        button_pressed_color = colours["button_pressed_color"]
+        text_area_color = colours["text_area_color"]
+        text_area_text_color = colours["text_area_text_color"]
+        echo_area_color = colours["echo_area_color"]
+        echo_area_text_color = colours["echo_area_text_color"]
+        scroll_bar_color = colours["scroll_bar_color"]
+        scroll_bar_background_color = colours["scroll_bar_background_color"]
+        scroll_bar_hover_color = colours["scroll_bar_hover_color"]
+        scroll_bar_pressed_color = colours["scroll_bar_pressed_color"]
 
         stylesheet = f"""
 QMainWindow, QDialog {{
@@ -265,15 +272,29 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         self.shortcut_up.activated.connect(lambda: self.move_cursor(QTextCursor.Up))
         self.shortcut_down.activated.connect(lambda: self.move_cursor(QTextCursor.Down))
         self.shortcut_left.activated.connect(lambda: self.move_cursor(QTextCursor.Left))
-        self.shortcut_right.activated.connect(lambda: self.move_cursor(QTextCursor.Right))
-        self.shortcut_home.activated.connect(lambda: self.move_cursor(QTextCursor.StartOfLine))
-        self.shortcut_end.activated.connect(lambda: self.move_cursor(QTextCursor.EndOfLine))
-        self.shortcut_fwrdword.activated.connect(lambda: self.move_cursor(QTextCursor.NextWord))
-        self.shortcut_backword.activated.connect(lambda: self.move_cursor(QTextCursor.PreviousWord))
+        self.shortcut_right.activated.connect(
+            lambda: self.move_cursor(QTextCursor.Right)
+        )
+        self.shortcut_home.activated.connect(
+            lambda: self.move_cursor(QTextCursor.StartOfLine)
+        )
+        self.shortcut_end.activated.connect(
+            lambda: self.move_cursor(QTextCursor.EndOfLine)
+        )
+        self.shortcut_fwrdword.activated.connect(
+            lambda: self.move_cursor(QTextCursor.NextWord)
+        )
+        self.shortcut_backword.activated.connect(
+            lambda: self.move_cursor(QTextCursor.PreviousWord)
+        )
 
         # Page movement
-        self.shortcut_pgup.activated.connect(lambda: self.move_half_page(QTextCursor.Up))
-        self.shortcut_pgdn.activated.connect(lambda: self.move_half_page(QTextCursor.Down))
+        self.shortcut_pgup.activated.connect(
+            lambda: self.move_half_page(QTextCursor.Up)
+        )
+        self.shortcut_pgdn.activated.connect(
+            lambda: self.move_half_page(QTextCursor.Down)
+        )
 
     def drag_enter_event(self, event: QDragEnterEvent):
         """
@@ -354,7 +375,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         Return the QVSED version specified in setup.py.
         """
         try:
-            return pkg_resources.get_distribution('qvsed').version
+            return pkg_resources.get_distribution("qvsed").version
         except pkg_resources.DistributionNotFound:
             return "?.?.?"
 
@@ -392,66 +413,86 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         """
         Extract the colour values from the configuration file.
         """
-        colors = getattr(qvsed_config, 'colors', None)
+        colors = getattr(qvsed_config, "colors", None)
 
         if colors is not None:
             # New-style config file
-            text_color = colors['window']['text']
-            background_color = colors['window']['background']
+            text_color = colors["window"]["text"]
+            background_color = colors["window"]["background"]
 
-            button_text_color = colors['button']['text']
-            button_color = colors['button']['background']
-            button_hover_color = colors['button']['hover']
-            button_pressed_color = colors['button']['pressed']
+            button_text_color = colors["button"]["text"]
+            button_color = colors["button"]["background"]
+            button_hover_color = colors["button"]["hover"]
+            button_pressed_color = colors["button"]["pressed"]
 
-            text_area_text_color = colors['text_area']['text']
-            text_area_color = colors['text_area']['background']
+            text_area_text_color = colors["text_area"]["text"]
+            text_area_color = colors["text_area"]["background"]
 
-            echo_area_text_color = colors['echo_area']['text']
-            echo_area_color = colors['echo_area']['background']
+            echo_area_text_color = colors["echo_area"]["text"]
+            echo_area_color = colors["echo_area"]["background"]
 
-            scroll_bar_color = colors['scroll_bar']['text']
-            scroll_bar_background_color = colors['scroll_bar']['background']
-            scroll_bar_hover_color = colors['scroll_bar']['hover']
-            scroll_bar_pressed_color = colors['scroll_bar']['pressed']
+            scroll_bar_color = colors["scroll_bar"]["text"]
+            scroll_bar_background_color = colors["scroll_bar"]["background"]
+            scroll_bar_hover_color = colors["scroll_bar"]["hover"]
+            scroll_bar_pressed_color = colors["scroll_bar"]["pressed"]
         else:
             # Old-style config file
-            self.echo_area_update("Warning: config.py is using old-style colour definitions")
+            self.echo_area_update(
+                "Warning: config.py is using old-style colour definitions"
+            )
 
-            text_color = getattr(qvsed_config, 'text_color', None)
-            background_color = getattr(qvsed_config, 'background_color', None)
+            text_color = getattr(qvsed_config, "text_color", None)
+            background_color = getattr(qvsed_config, "background_color", None)
 
-            button_text_color = getattr(qvsed_config, 'button_text_color', text_color)
-            button_color = getattr(qvsed_config, 'button_color', None)
-            button_hover_color = getattr(qvsed_config, 'button_hover_color', getattr(qvsed_config, 'button_focus_color', None))
-            button_pressed_color = getattr(qvsed_config, 'button_pressed_color', background_color)
+            button_text_color = getattr(qvsed_config, "button_text_color", text_color)
+            button_color = getattr(qvsed_config, "button_color", None)
+            button_hover_color = getattr(
+                qvsed_config,
+                "button_hover_color",
+                getattr(qvsed_config, "button_focus_color", None),
+            )
+            button_pressed_color = getattr(
+                qvsed_config, "button_pressed_color", background_color
+            )
 
-            text_area_text_color = getattr(qvsed_config, 'text_area_text_color', text_color)
-            text_area_color = getattr(qvsed_config, 'text_area_color', button_hover_color)
+            text_area_text_color = getattr(
+                qvsed_config, "text_area_text_color", text_color
+            )
+            text_area_color = getattr(
+                qvsed_config, "text_area_color", button_hover_color
+            )
 
-            echo_area_text_color = getattr(qvsed_config, 'echo_area_text_color', text_color)
-            echo_area_color = getattr(qvsed_config, 'echo_area_color', text_area_color)
+            echo_area_text_color = getattr(
+                qvsed_config, "echo_area_text_color", text_color
+            )
+            echo_area_color = getattr(qvsed_config, "echo_area_color", text_area_color)
 
-            scroll_bar_color = getattr(qvsed_config, 'scroll_bar_color', button_color)
-            scroll_bar_background_color = getattr(qvsed_config, 'scroll_bar_background_color', button_hover_color)
-            scroll_bar_hover_color = getattr(qvsed_config, 'scroll_bar_hover_color', button_pressed_color)
-            scroll_bar_pressed_color = getattr(qvsed_config, 'scroll_bar_pressed_color', button_pressed_color)
+            scroll_bar_color = getattr(qvsed_config, "scroll_bar_color", button_color)
+            scroll_bar_background_color = getattr(
+                qvsed_config, "scroll_bar_background_color", button_hover_color
+            )
+            scroll_bar_hover_color = getattr(
+                qvsed_config, "scroll_bar_hover_color", button_pressed_color
+            )
+            scroll_bar_pressed_color = getattr(
+                qvsed_config, "scroll_bar_pressed_color", button_pressed_color
+            )
 
         colours = {
-                'text_color': text_color,
-                'background_color': background_color,
-                'button_color': button_color,
-                'button_text_color': button_text_color,
-                'button_hover_color': button_hover_color,
-                'button_pressed_color': button_pressed_color,
-                'text_area_color': text_area_color,
-                'text_area_text_color': text_area_text_color,
-                'echo_area_color': echo_area_color,
-                'echo_area_text_color': echo_area_text_color,
-                'scroll_bar_color': scroll_bar_color,
-                'scroll_bar_background_color': scroll_bar_background_color,
-                'scroll_bar_hover_color': scroll_bar_hover_color,
-                'scroll_bar_pressed_color': scroll_bar_pressed_color
+            "text_color": text_color,
+            "background_color": background_color,
+            "button_color": button_color,
+            "button_text_color": button_text_color,
+            "button_hover_color": button_hover_color,
+            "button_pressed_color": button_pressed_color,
+            "text_area_color": text_area_color,
+            "text_area_text_color": text_area_text_color,
+            "echo_area_color": echo_area_color,
+            "echo_area_text_color": echo_area_text_color,
+            "scroll_bar_color": scroll_bar_color,
+            "scroll_bar_background_color": scroll_bar_background_color,
+            "scroll_bar_hover_color": scroll_bar_hover_color,
+            "scroll_bar_pressed_color": scroll_bar_pressed_color,
         }
 
         return colours
@@ -465,18 +506,25 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
         self.font_family = qvsed_config.font_family
         self.font_size = qvsed_config.font_size
-        self.tab_stop_width = getattr(qvsed_config, 'tab_stop_width', 4)
-        self.echo_area_timeout = getattr(qvsed_config, 'echo_area_timeout', 3000)
+        self.tab_stop_width = getattr(qvsed_config, "tab_stop_width", 4)
+        self.echo_area_timeout = getattr(qvsed_config, "echo_area_timeout", 3000)
 
-        if getattr(qvsed_config, 'vanilla_theme', False):
+        if getattr(qvsed_config, "vanilla_theme", False):
             self.apply_vanilla_style_sheet()
             return
 
         # Load the colour scheme settings from the config file
         colours = self.extract_color_values(qvsed_config)
         self.apply_style_sheet(colours)
-        if None in (colours['text_color'], colours['background_color'], colours['button_color'], colours['button_hover_color']):
-            self.echo_area_update("config.py appears to be broken, generating a new one.")
+        if None in (
+            colours["text_color"],
+            colours["background_color"],
+            colours["button_color"],
+            colours["button_hover_color"],
+        ):
+            self.echo_area_update(
+                "config.py appears to be broken, generating a new one."
+            )
             self.generate_config()
 
     def load_from_file(self, file_path=None):
@@ -503,13 +551,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         else:
             self.echo_area_update("Invalid or missing file path.")
 
-    def load_ui_file(self):
+    def load_ui(self):
         """
         Load the UI file for the QVSED window.
         """
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        ui_file = os.path.join(current_dir, "qvsed.ui")
-        loadUi(ui_file, self)
+        self.setupUi(self)
 
     def move_cursor(self, direction):
         """
@@ -540,7 +586,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         if direction == QTextCursor.Up:
             scroll_bar.setValue(max(scroll_value - half_page_steps * scroll_step, 0))
         elif direction == QTextCursor.Down:
-            scroll_bar.setValue(min(scroll_value + half_page_steps * scroll_step, scroll_maximum))
+            scroll_bar.setValue(
+                min(scroll_value + half_page_steps * scroll_step, scroll_maximum)
+            )
 
         cursor.movePosition(direction, QTextCursor.MoveAnchor, half_page_steps)
         text_area.setTextCursor(cursor)
@@ -582,7 +630,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                 self.echo_area_update(f"{saved} file {file_name}.")
             except Exception as error:
                 self.echo_area_update(f"Error saving file: {str(error)}")
-
 
     def set_text_area_encoding(self, encoding):
         """
@@ -651,7 +698,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         """
         font = self.textArea.font()
         font_metrics = QFontMetricsF(font)
-        space_width = font_metrics.horizontalAdvance(' ')
+        space_width = font_metrics.horizontalAdvance(" ")
         self.textArea.setTabStopDistance(space_width * 4)
 
     def set_up_shortcuts(self):
@@ -688,9 +735,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         """
         text_area = self.textArea
 
-        help_message = """QVSED - Qt-based Volatile Small Editor
+        help_message = """QVSED - Qt-based Versatile Stateless Editor
 ========================================
-QVSED is a stateless, volatile text editor with a minimalist approach, hovering solely on text editing without file metadata or prompts for potentially destructive actions.
+QVSED is a stateless and versatile text editor with a minimalist approach, hovering solely on text editing without file metadata or prompts for potentially destructive actions.
 
 This is the Text Area, where the actual editing takes place. Type anything you want into here, and edit as you please.
 Down there, at the bottom of the window, is the Echo Area, where messages and errors will be displayed.
@@ -698,7 +745,7 @@ On the left of the QVSED window is the Action Deck, containing commands to clear
 
 I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little venture into my first Qt project.
 
-- Arsalan Kazmi <sonicspeed848@gmail.com>, That1M8Head on GitHub"""
+- Arsalan \"Velocity\" Kazmi <sonicspeed848@gmail.com>, That1M8Head on GitHub"""
 
         self.echo_area_update("Help message shown in Text Area.")
 
@@ -730,10 +777,12 @@ I hope you enjoy using QVSED! I enjoyed writing it, and it's a nice little ventu
         for child_widget in widget.findChildren(QWidget):
             self.update_widget_fonts(child_widget)
 
+
 class KeyPressFilter(QObject):
     """
     Subclasses QObject.
     """
+
     def __init__(self, window):
         super().__init__()
         self.window = window
@@ -744,7 +793,9 @@ class KeyPressFilter(QObject):
         Override the eventFilter and use QEvent.KeyPress to handle invalid key bindings.
         """
         if event.type() == QEvent.KeyPress:
-            if (event.modifiers() & (Qt.ControlModifier | Qt.AltModifier)) and event.key() not in [Qt.Key_Control, Qt.Key_Alt, Qt.Key_Shift]:
+            if (
+                event.modifiers() & (Qt.ControlModifier | Qt.AltModifier)
+            ) and event.key() not in [Qt.Key_Control, Qt.Key_Alt, Qt.Key_Shift]:
                 keys = []
                 if event.modifiers() & Qt.ControlModifier:
                     keys.append("C")
@@ -753,14 +804,25 @@ class KeyPressFilter(QObject):
                 if event.modifiers() & Qt.ShiftModifier:
                     keys.append("S")
                 if event.key() != Qt.Key_No:
-                    is_os_shortcut = any(event.matches(shortcut) for shortcut in [
-                        QKeySequence.Copy, QKeySequence.Cut, QKeySequence.Paste,
-                        QKeySequence.Undo, QKeySequence.Redo, QKeySequence.SelectAll,
-                        QKeySequence.MoveToPreviousWord, QKeySequence.MoveToNextWord,
-                        QKeySequence.SelectPreviousWord, QKeySequence.SelectNextWord,
-                        QKeySequence.SelectStartOfDocument, QKeySequence.SelectEndOfDocument,
-                        QKeySequence.DeleteStartOfWord, QKeySequence.DeleteEndOfWord
-                    ])
+                    is_os_shortcut = any(
+                        event.matches(shortcut)
+                        for shortcut in [
+                            QKeySequence.Copy,
+                            QKeySequence.Cut,
+                            QKeySequence.Paste,
+                            QKeySequence.Undo,
+                            QKeySequence.Redo,
+                            QKeySequence.SelectAll,
+                            QKeySequence.MoveToPreviousWord,
+                            QKeySequence.MoveToNextWord,
+                            QKeySequence.SelectPreviousWord,
+                            QKeySequence.SelectNextWord,
+                            QKeySequence.SelectStartOfDocument,
+                            QKeySequence.SelectEndOfDocument,
+                            QKeySequence.DeleteStartOfWord,
+                            QKeySequence.DeleteEndOfWord,
+                        ]
+                    )
                     if is_os_shortcut:
                         return super().eventFilter(obj, event)
 
@@ -773,13 +835,15 @@ class KeyPressFilter(QObject):
                 return True
         return super().eventFilter(obj, event)
 
-class FileDialogBox(QDialog):
+
+class FileDialogBox(QDialog, QVSEDMainDialog):
     """
     Class for QVSED file dialogs.
     """
+
     def __init__(self, operation, parent=None):
         super(FileDialogBox, self).__init__(parent)
-        self.load_ui_file()
+        self.setupUi()
 
         self.operation = operation
         self.selected_file_path = ""
@@ -806,14 +870,6 @@ class FileDialogBox(QDialog):
         self.chdirButton.clicked.connect(self.set_current_working_directory)
         self.chdirButton.setShortcut(QKeySequence("Alt+D"))
 
-    def load_ui_file(self):
-        """
-        Load the UI file for the QVSED dialog box.
-        """
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        ui_file = os.path.join(current_dir, "qvsed_dialog.ui")
-        loadUi(ui_file, self)
-
     def open_system_dialog(self):
         """
         Used to open the system's file dialog.
@@ -821,9 +877,13 @@ class FileDialogBox(QDialog):
         file_dialog = QFileDialog()
 
         if self.operation == "save":
-            file_path, _ = file_dialog.getSaveFileName(self, "Save File", self.get_selected_directory())
+            file_path, _ = file_dialog.getSaveFileName(
+                self, "Save File", self.get_selected_directory()
+            )
         elif self.operation == "open":
-            file_path, _ = file_dialog.getOpenFileName(self, "Open File", self.get_selected_directory())
+            file_path, _ = file_dialog.getOpenFileName(
+                self, "Open File", self.get_selected_directory()
+            )
 
         if file_path:
             self.filePathBox.setText(file_path)
@@ -841,8 +901,8 @@ class FileDialogBox(QDialog):
                 path += os.sep
             path = os.path.dirname(path)
 
-        if path.startswith('~'):
-            path = os.path.expanduser(path.replace('~', os.path.expanduser('~')))
+        if path.startswith("~"):
+            path = os.path.expanduser(path.replace("~", os.path.expanduser("~")))
         return path
 
     def get_selected_file_path(self):
@@ -879,11 +939,14 @@ class FileDialogBox(QDialog):
         """
         Update the labels depending on the operation.
         """
-        self.mainLabel.setText(f"Enter the file path to {self.operation} (relative or absolute)")
+        self.mainLabel.setText(
+            f"Enter the file path to {self.operation} (relative or absolute)"
+        )
         self.confirmButton.setText(self.operation.capitalize())
         home_dir = os.path.expanduser("~")
         cwd = os.getcwd().replace(home_dir, "~").replace("\\", "/")
         self.cwdLabel.setText(f"Current working directory is {cwd}")
+
 
 def main():
     """
@@ -891,6 +954,7 @@ def main():
     """
     app = QVSEDApp()
     app.run()
+
 
 if __name__ == "__main__":
     main()

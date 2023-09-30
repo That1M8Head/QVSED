@@ -1,3 +1,2 @@
-include qvsed/qvsed.ui
-include qvsed/qvsed_dialog.ui
+include qvsed/qvsed_ui.py
 include qvsed/config_default.py

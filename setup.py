@@ -7,10 +7,10 @@ setup(
     name='qvsed',
     version='1.6.1',
     author='Arsalan Kazmi',
-    description='Qt-Based Volatile Small Editor',
+    description='Qt-based Versatile Stateless Editor',
     long_description="""QVSED is a volatile and small text editor.
 
-"Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded.
+QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded.
 Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata.
 You may be prompted if you're about to overwrite a file, but that's up to your OS, not QVSED.
     
@@ -32,5 +32,4 @@ It stays out of your way on many occasions. Whether or not that's a good thing i
             'qvsed = qvsed.qvsed:main',
         ],
     },
-    package_data={'qvsed': ['qvsed.ui', 'qvsed_dialog.ui']},
 )
