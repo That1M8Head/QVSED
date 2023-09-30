@@ -1,10 +1,10 @@
-# QVSED - Qt-based Volatile Small Editor
+# QVSED - Qt-based Versatile Stateless Editor
 
-QVSED is a volatile text editor.
+QVSED is a stateless text editor.
 
 ![QVSED screenshot, showing the help message](screenshots/qvsed-screenshot.png)
 
-"Volatile" means that QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded.
+QVSED is entirely stateless - once you open a file, QVSED doesn't store any file paths or any other data other than the text contents of the file you loaded.
 Additionally, QVSED won't prompt you if you're about to potentially lose an unsaved file, since it doesn't know of any file metadata.
 
 QVSED follows the philosophy of ultra-minimalism, with its heavy emphasis on just editing text and nothing more.
